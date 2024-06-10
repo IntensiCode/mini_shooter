@@ -18,8 +18,9 @@ extension ComponentExtensions on Component {
 enum MiniEffectKind {
   appear,
   explosion,
-  sparkle,
   hit,
+  smoke,
+  sparkle,
 }
 
 class MiniEffects extends MiniScriptComponent {
@@ -33,8 +34,9 @@ class MiniEffects extends MiniScriptComponent {
   void onLoad() async {
     animations[MiniEffectKind.appear] = appear();
     animations[MiniEffectKind.explosion] = explosion();
-    animations[MiniEffectKind.sparkle] = sparkle();
     animations[MiniEffectKind.hit] = hit();
+    animations[MiniEffectKind.smoke] = smoke();
+    animations[MiniEffectKind.sparkle] = sparkle();
   }
 
   @override

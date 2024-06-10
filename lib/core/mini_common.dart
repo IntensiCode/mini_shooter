@@ -54,6 +54,8 @@ SpriteAnimation appear() => sprites.createAnimation(row: 12, stepTime: 0.1, from
 
 SpriteAnimation shield() => sprites.createAnimation(row: 13, stepTime: 0.1, from: 3, to: 7);
 
+SpriteAnimation smoke() => sprites.createAnimation(row: 14, stepTime: 0.05, from: 0, to: 11)..loop = false;
+
 Paint pixelPaint() => Paint()
   ..isAntiAlias = false
   ..filterQuality = FilterQuality.none;

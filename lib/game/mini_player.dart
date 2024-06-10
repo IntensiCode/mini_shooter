@@ -13,6 +13,7 @@ import '../util/extensions.dart';
 import '../util/input_acceleration.dart';
 import 'mini_effects.dart';
 import 'mini_laser.dart';
+import 'mini_missile.dart';
 import 'mini_state.dart';
 
 enum _PlayerState {
@@ -101,6 +102,7 @@ class MiniPlayer extends PositionComponent
 
   _go() {
     add(MiniLaser(this, () => primaryFire, parent!));
+    add(MiniMissile(this, () => secondaryFire, parent!));
     _state = _PlayerState.playing;
   }
 
