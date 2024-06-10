@@ -16,7 +16,7 @@ Probably not taking this too far. But here's what probably will be done in the
 next few days:
 
 * [X] laser charge extra => laser recharge rate
-* [ ] have enemies wander left/right a bit
+* [X] have enemies wander left/right a bit
 * [ ] have single enemies attack galaga style
 * [ ] have combined enemy attacks galaga style
 * [ ] maybe add space invaders ufo

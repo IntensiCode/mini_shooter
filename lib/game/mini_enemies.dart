@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -124,7 +126,10 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
     at(0.0, () async => _showIncoming());
     at(0.5, () async => _showEnemy());
     at(1.5, () async => _activate());
+    _basePos.setFrom(position);
   }
+
+  final _basePos = Vector2.zero();
 
   _showIncoming() {
     makeAnimXY(appear()..loop = false, 0, 0)
@@ -147,6 +152,21 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
   }
 
   _activate() => _state = MiniEnemyState.waiting;
+
+  @override
+  update(double dt) {
+    super.update(dt);
+    if (_state == MiniEnemyState.waiting) {
+      _wandering += dt * 2;
+      if (_wandering > _maxWandering) {
+        _wandering -= _maxWandering;
+      }
+      position.x = _basePos.x + sin(_wandering) * 8;
+    }
+  }
+
+  double _wandering = 0;
+  static const _maxWandering = pi * 2;
 
   double life = 3;
 
