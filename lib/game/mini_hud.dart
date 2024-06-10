@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:signals_core/signals_core.dart';
 
 import '../core/mini_common.dart';
 import '../scripting/mini_script_functions.dart';
@@ -17,12 +18,12 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
     onMessage('player-ready', (it) => player = it);
   }
 
+  static const xBase = xCenter - 15;
+
   @override
   void onLoad() async {
     priority = 100;
     scoreFont = SpriteSheet(image: await image('scorefont.png'), srcSize: Vector2.all(8));
-
-    const xBase = xCenter - 15;
 
     empty = scoreFont.getSprite(0, 11);
     while (scoreDigits.length < 7) {
@@ -35,35 +36,24 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
 
     _trackScore();
 
-    final life = sprites.getSprite(0, 8);
-    add(SpriteComponent(sprite: life, position: Vector2(xBase + 20, 0)));
-    add(lives = SpriteComponent(sprite: empty, position: Vector2(xBase + 35, 4)));
-
-    final shield = sprites.getSprite(9, 8);
-    add(shieldsIcon = SpriteComponent(sprite: shield, position: Vector2(xBase + 45, 0)));
-    add(shields = SpriteComponent(sprite: empty, position: Vector2(xBase + 60, 4)));
-
-    final missile = sprites.getSprite(10, 3);
-    add(missilesIcon = SpriteComponent(sprite: missile, position: Vector2(xBase + 70, 0)));
-    add(missiles = SpriteComponent(sprite: empty, position: Vector2(xBase + 85, 4)));
-
-    autoEffect('MiniHud.lives', () {
-      final update = state.lives.clamp(0, 10);
-      lives.sprite = scoreFont.getSprite(0, update);
-      _highlight(lives.position);
-    });
-    autoEffect('MiniHud.missiles', () {
-      final update = state.missiles.clamp(0, 10);
-      missiles.sprite = scoreFont.getSprite(0, update);
-      _highlight(missiles.position);
-    });
-    autoEffect('MiniHud.shields', () {
-      final update = state.shields.clamp(0, 10);
-      shields.sprite = scoreFont.getSprite(0, update);
-      _highlight(shields.position);
-    });
+    lives = _place(0, 8, 20, state.data[MiniStateId.lives]!, 'lives');
+    shields = _place(9, 8, 45, state.data[MiniStateId.shields]!, 'shields');
+    missiles = _place(10, 3, 70, state.data[MiniStateId.missiles]!, 'missiles');
 
     _trackExtraLives();
+  }
+
+  SpriteComponent _place(int row, int column, int offset, Signal<int> signal, String hint) {
+    final sprite = sprites.getSprite(row, column);
+    add(SpriteComponent(sprite: sprite, position: Vector2(xBase + offset, 0)));
+    late final SpriteComponent it;
+    add(it = SpriteComponent(sprite: empty, position: Vector2(xBase + offset + 15, 4)));
+    autoEffect('MiniHud.$hint', () {
+      final update = signal.value.clamp(0, 10);
+      it.sprite = scoreFont.getSprite(0, update);
+      _highlight(it.position);
+    });
+    return it;
   }
 
   void _trackScore() {
