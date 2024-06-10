@@ -15,6 +15,7 @@ enum MiniSound {
   hit,
   incoming,
   laser,
+  launch,
   strangeness,
 }
 

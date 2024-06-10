@@ -17,7 +17,7 @@ next few days:
 
 * [X] laser charge extra => laser recharge rate
 * [X] have enemies wander left/right a bit
-* [ ] have single enemies attack galaga style
+* [X] have single enemies attack galaga style
 * [ ] have combined enemy attacks galaga style
 * [ ] maybe add space invaders ufo
 * [ ] maybe add special bigger enemy for the combined attack
