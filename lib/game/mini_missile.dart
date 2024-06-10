@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:mini_shooter/util/debug.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_soundboard.dart';
@@ -93,9 +94,39 @@ class MiniMissileShot extends PositionComponent with CollisionCallbacks {
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if (other case MiniTarget it) {
-      final destroyed = it.applyDamage(missile: 1 + state.charge * 0.5);
-      if (!destroyed) spawnEffect(MiniEffectKind.hit, position);
+      parent!.add(Nuked(radius: 24, position: position));
       _recycle(this);
     }
+  }
+}
+
+class Nuked extends CircleComponent with CollisionCallbacks {
+  Nuked({required super.radius, required super.position}) : super(anchor: Anchor.center) {
+    opacity = 0;
+    add(DebugCircleHitbox(radius: radius, anchor: Anchor.topLeft));
+    add(CircleHitbox(radius: radius, anchor: Anchor.topLeft, isSolid: true));
+  }
+
+  double _in = 0;
+  double _out = 1;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (_in < 1) {
+      _in += dt * 5;
+      opacity = _in.clamp(0, 1);
+    } else if (_out > 0) {
+      _out -= dt * 2;
+      opacity = _out.clamp(0, 1);
+    } else {
+      removeFromParent();
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other case MiniTarget it) it.applyDamage(missile: 5);
   }
 }

@@ -12,7 +12,7 @@ class DebugCircleHitbox extends CircleComponent with HasVisibility {
     super.position,
     super.scale,
     super.angle,
-    super.anchor,
+    super.anchor = Anchor.center,
     super.children,
     super.priority,
     super.paint,
