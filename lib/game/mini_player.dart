@@ -67,9 +67,9 @@ class MiniPlayer extends PositionComponent
     at(0.0, () => _go());
   }
 
-  SpriteAnimationComponent _showIncoming() {
+  _showIncoming() {
     soundboard.play(MiniSound.incoming);
-    return makeAnimXY(appear(), 0, 0)
+    makeAnimXY(appear(), 0, 0)
       ..priority = 10
       ..removeOnFinish = true;
   }

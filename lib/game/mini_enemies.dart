@@ -4,7 +4,6 @@ import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:mini_shooter/util/extensions.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
@@ -13,6 +12,7 @@ import '../scripting/mini_script.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
 import '../util/debug.dart';
+import '../util/extensions.dart';
 import '../util/random.dart';
 import 'mini_balls.dart';
 import 'mini_effects.dart';
