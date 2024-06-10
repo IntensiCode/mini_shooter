@@ -17,7 +17,7 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
       clearScript();
       fadeOutAll(0.5);
       at(0.5, () => showScreen(Screen.game));
-      execute();
+      executeScript();
     });
 
     state = MiniState();

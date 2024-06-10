@@ -22,7 +22,7 @@ mixin MiniScript on AutoDispose, MiniScriptFunctions {
     });
   }
 
-  StreamSubscription execute() {
+  StreamSubscription executeScript() {
     final it = Stream.fromIterable(script).asyncMap((it) async {
       if (!isMounted) return;
       return await it();
@@ -34,7 +34,7 @@ mixin MiniScript on AutoDispose, MiniScriptFunctions {
   @override
   void onMount() {
     super.onMount();
-    execute();
+    executeScript();
   }
 
   @override
