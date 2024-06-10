@@ -27,7 +27,7 @@ next few days:
 * [X] collide player with attacking enemies
 * [ ] missiles! :-D
 * [ ] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
-* [ ] extra life
+* [X] extra life
 
 No promises!
 

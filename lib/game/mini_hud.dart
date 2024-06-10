@@ -62,6 +62,8 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
       shields.sprite = scoreFont.getSprite(0, update);
       _highlight(shields.position);
     });
+
+    _trackExtraLives();
   }
 
   void _trackScore() {
@@ -76,6 +78,21 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
           it.sprite = scoreFont.getSprite(0, digit);
         }
         score = score ~/ 10;
+      }
+    });
+  }
+
+  void _trackExtraLives() {
+    autoEffect('MiniHud.extraLives', () {
+      final score = state.data[MiniStateId.score]!;
+      final now = score.value;
+      final before = score.previousValue;
+      if (before == null) return;
+      final from = before ~/ 2000;
+      final to = now ~/ 2000;
+      if (from < to) {
+        final lives = state.data[MiniStateId.lives]!;
+        lives.value = lives.peek() + 1;
       }
     });
   }
