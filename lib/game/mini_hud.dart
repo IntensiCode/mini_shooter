@@ -33,6 +33,20 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
       add(it);
     }
 
+    autoEffect(() {
+      int score = state.score;
+      for (int i = 0; i < scoreDigits.length; i++) {
+        final it = scoreDigits[i];
+        final digit = score % 10;
+        if (score == 0 && i > 0) {
+          it.sprite = empty;
+        } else {
+          it.sprite = scoreFont.getSprite(0, digit);
+        }
+        score = score ~/ 10;
+      }
+    });
+
     final life = sprites.getSprite(0, 8);
     add(SpriteComponent(sprite: life, position: Vector2(xBase + 20, 0)));
     add(lives = SpriteComponent(sprite: empty, position: Vector2(xBase + 35, 4)));
@@ -46,18 +60,23 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
     add(missiles = SpriteComponent(sprite: empty, position: Vector2(xBase + 85, 4)));
 
     autoEffect(() {
-      state.lives;
-      spawnEffect(MiniEffectKind.appear, lives.position.translated(4, 4));
+      final update = state.lives.clamp(0, 10);
+      lives.sprite = scoreFont.getSprite(0, update);
+      _highlight(lives.position);
     });
     autoEffect(() {
-      state.missiles;
-      spawnEffect(MiniEffectKind.appear, missiles.position.translated(4, 4));
+      final update = state.missiles.clamp(0, 10);
+      missiles.sprite = scoreFont.getSprite(0, update);
+      _highlight(missiles.position);
     });
     autoEffect(() {
-      state.shields;
-      spawnEffect(MiniEffectKind.appear, shields.position.translated(4, 4));
+      final update = state.shields.clamp(0, 10);
+      shields.sprite = scoreFont.getSprite(0, update);
+      _highlight(shields.position);
     });
   }
+
+  _highlight(Vector2 position) => spawnEffect(MiniEffectKind.appear, position.translated(4, 4));
 
   late SpriteSheet scoreFont;
   late Sprite empty;
@@ -70,30 +89,4 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
 
   late SpriteComponent shieldsIcon;
   late SpriteComponent missilesIcon;
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    int score = state.score;
-    for (int i = 0; i < scoreDigits.length; i++) {
-      final it = scoreDigits[i];
-      final digit = score % 10;
-      if (score == 0 && i > 0) {
-        it.sprite = empty;
-      } else {
-        it.sprite = scoreFont.getSprite(0, digit);
-      }
-      score = score ~/ 10;
-    }
-
-    final lives = state.lives.clamp(0, 10);
-    this.lives.sprite = scoreFont.getSprite(0, lives);
-
-    final shields = state.shields.clamp(0, 10) ?? 11;
-    this.shields.sprite = scoreFont.getSprite(0, shields);
-
-    final missiles = state.missiles.clamp(0, 10) ?? 11;
-    this.missiles.sprite = scoreFont.getSprite(0, missiles);
-  }
 }
