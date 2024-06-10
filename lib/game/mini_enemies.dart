@@ -142,7 +142,8 @@ enum MiniEnemyState {
   waiting,
 }
 
-class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget {
+class MiniEnemy extends PositionComponent
+    with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, CollisionCallbacks {
   //
   MiniEnemy(this.kind, this.level, this.onDefeated);
 
@@ -194,8 +195,10 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
 
     final radius = kind == MiniEnemyKind.smiley ? 7.0 : 6.0;
     add(DebugCircleHitbox(radius: radius, anchor: Anchor.center));
-    add(CircleHitbox(radius: radius, anchor: Anchor.center, collisionType: CollisionType.passive));
+    add(_hitbox = CircleHitbox(radius: radius, anchor: Anchor.center, collisionType: CollisionType.passive));
   }
+
+  late CircleHitbox _hitbox;
 
   _activate() => _state = MiniEnemyState.waiting;
 
@@ -217,6 +220,10 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
         position.x = _basePos.x;
         position.y = -size.y;
         _state = MiniEnemyState.settling;
+
+        // after attack run, we go passive again. bullets are active. so
+        // nothing for the enemy to do outside the attack run.
+        _hitbox.collisionType = CollisionType.passive;
       }
     }
     if (_state == MiniEnemyState.launching) {
@@ -226,6 +233,9 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
         _attackDx = position.x < gameWidth / 2 ? 1 : -1;
         _attackDx *= 5 + random.nextDoubleLimit(5);
         _state = MiniEnemyState.attacking;
+
+        // to collide with player, we switch to active during the attack run:
+        _hitbox.collisionType = CollisionType.active;
       }
       position.x = _launched.x + cos(_launching) * _launchDistance * _launchDir - _launchDistance * _launchDir;
       position.y = _launched.y - sin(_launching).abs() * _launchDistance;
@@ -275,6 +285,15 @@ class MiniEnemy extends PositionComponent with AutoDispose, MiniScriptFunctions,
       soundboard.play(MiniSound.hit);
       state.score++;
       return false;
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other case Defender it) {
+      it.onHit(kind == MiniEnemyKind.smiley ? 2 : 1);
+      applyDamage(laser: life);
     }
   }
 }

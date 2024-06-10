@@ -150,15 +150,15 @@ class MiniPlayer extends PositionComponent
   }
 
   @override
-  bool onHit() {
-    if (state.shields > 0) {
+  bool onHit([int hits = 1]) {
+    if (state.shields >= hits) {
       shielded.animationTicker?.reset();
       soundboard.play(MiniSound.block);
-      state.shields--;
+      state.shields -= hits;
       return false;
     } else {
       state.lives--;
-      state.shields = 3;
+      state.shields = 0;
       state.missiles = 0;
       sendMessage('player-destroyed', null);
       spawnEffect(MiniEffectKind.explosion, position);

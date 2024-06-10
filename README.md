@@ -24,7 +24,7 @@ next few days:
 * [ ] use tiled for the levels
 * [ ] challenging stage every five levels
 * [ ] space worm for challenging stage
-* [ ] collide player with attacking enemies
+* [X] collide player with attacking enemies
 * [ ] missiles! :-D
 * [ ] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
 

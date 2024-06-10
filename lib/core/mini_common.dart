@@ -89,7 +89,7 @@ mixin Collector {
 }
 
 mixin Defender {
-  bool onHit();
+  bool onHit([int hits = 1]);
 }
 
 mixin MiniTarget {

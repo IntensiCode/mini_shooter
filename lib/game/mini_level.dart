@@ -106,6 +106,8 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
 
   void _executeRetry() {
     _enemies.reactivate();
+    state.shields = 3;
+    state.missiles = 0;
     add(MiniPlayer());
   }
 }
