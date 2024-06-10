@@ -13,24 +13,45 @@ class MiniMissile extends Component {
   final bool Function() shouldFire;
   final Component level;
 
+  double _triggerTime = 0;
+
   @override
   update(double dt) {
     super.update(dt);
 
-    if (_coolDown > 0) _coolDown -= dt;
-    if (_coolDown <= 0 && shouldFire() && state.missiles > 0) {
-      state.missiles--;
-
-      final it = _pool.isEmpty //
-          ? MiniMissileShot(_recycle)
-          : _pool.removeLast();
-      it.visual.sprite = sprites.getSprite(10, 3);
-      it.position.setFrom(ship.position);
-      level.add(it);
-      soundboard.play(MiniSound.missile);
-
-      _coolDown = 1;
+    if (_coolDown > 0) {
+      _coolDown -= dt;
+      return;
     }
+
+    if (state.missiles <= 0) {
+      return;
+    }
+
+    final fire = shouldFire();
+    if (fire) {
+      _triggerTime += dt;
+    } else if (!fire && _triggerTime > 0 && _triggerTime < 0.5) {
+      _triggerTime = 0;
+      _fire();
+    } else if (!fire && _triggerTime >= 0.5) {
+      _triggerTime = 0;
+      _fire(false);
+    } else if (!fire) {
+      _triggerTime = 0;
+    }
+  }
+
+  void _fire([bool homing = true]) {
+    state.missiles--;
+
+    final it = _pool.isEmpty ? MiniMissileShot(_recycle) : _pool.removeLast();
+    it.homing = homing;
+    it.position.setFrom(ship.position);
+    level.add(it);
+    soundboard.play(MiniSound.missile);
+
+    _coolDown = 0.5;
   }
 
   void _recycle(MiniMissileShot it) {
@@ -46,10 +67,10 @@ class MiniMissile extends Component {
 class MiniMissileShot extends PositionComponent with CollisionCallbacks {
   MiniMissileShot(this._recycle) {
     add(RectangleHitbox(position: Vector2.zero(), size: Vector2.all(10), anchor: Anchor.center));
-    add(visual = SpriteComponent(anchor: Anchor.center));
+    add(SpriteComponent(sprite: sprites.getSprite(10, 3), anchor: Anchor.center));
   }
 
-  late final SpriteComponent visual;
+  bool homing = true;
 
   final void Function(MiniMissileShot) _recycle;
 
