@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
@@ -32,8 +33,15 @@ mixin MiniScriptFunctions on Component, AutoDispose {
     disposeAll();
   }
 
-  void autoEffect(void Function() callback) {
-    autoDispose('autoEffect-$_autoDisposeCount', effect(() => callback()));
+  void autoEffect(String hint, void Function() callback) {
+    autoDispose(
+      'autoEffect-$_autoDisposeCount-$hint',
+      effect(
+        () => callback(),
+        debugLabel: hint,
+        onDispose: () => logInfo('effect disposed: $hint'),
+      ),
+    );
     _autoDisposeCount++;
   }
 

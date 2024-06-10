@@ -85,7 +85,7 @@ class MiniPlayer extends PositionComponent
     shielded = SpriteAnimationComponent(animation: shield(), anchor: Anchor.center);
     shielded.scale.setAll(1.5);
 
-    autoEffect(() {
+    autoEffect('MiniPlayer.shields', () {
       final it = state.shields;
       if (it == 0 && shielded.isMounted) shielded.removeFromParent();
       if (it > 0 && !shielded.isMounted) add(shielded);

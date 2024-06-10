@@ -33,19 +33,7 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
       add(it);
     }
 
-    autoEffect(() {
-      int score = state.score;
-      for (int i = 0; i < scoreDigits.length; i++) {
-        final it = scoreDigits[i];
-        final digit = score % 10;
-        if (score == 0 && i > 0) {
-          it.sprite = empty;
-        } else {
-          it.sprite = scoreFont.getSprite(0, digit);
-        }
-        score = score ~/ 10;
-      }
-    });
+    _trackScore();
 
     final life = sprites.getSprite(0, 8);
     add(SpriteComponent(sprite: life, position: Vector2(xBase + 20, 0)));
@@ -59,20 +47,36 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
     add(missilesIcon = SpriteComponent(sprite: missile, position: Vector2(xBase + 70, 0)));
     add(missiles = SpriteComponent(sprite: empty, position: Vector2(xBase + 85, 4)));
 
-    autoEffect(() {
+    autoEffect('MiniHud.lives', () {
       final update = state.lives.clamp(0, 10);
       lives.sprite = scoreFont.getSprite(0, update);
       _highlight(lives.position);
     });
-    autoEffect(() {
+    autoEffect('MiniHud.missiles', () {
       final update = state.missiles.clamp(0, 10);
       missiles.sprite = scoreFont.getSprite(0, update);
       _highlight(missiles.position);
     });
-    autoEffect(() {
+    autoEffect('MiniHud.shields', () {
       final update = state.shields.clamp(0, 10);
       shields.sprite = scoreFont.getSprite(0, update);
       _highlight(shields.position);
+    });
+  }
+
+  void _trackScore() {
+    autoEffect('MiniHud.score', () {
+      int score = state.score;
+      for (int i = 0; i < scoreDigits.length; i++) {
+        final it = scoreDigits[i];
+        final digit = score % 10;
+        if (score == 0 && i > 0) {
+          it.sprite = empty;
+        } else {
+          it.sprite = scoreFont.getSprite(0, digit);
+        }
+        score = score ~/ 10;
+      }
     });
   }
 
