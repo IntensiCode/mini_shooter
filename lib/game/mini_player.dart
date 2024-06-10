@@ -129,6 +129,7 @@ class MiniPlayer extends PositionComponent
     switch (kind) {
       case MiniItemKind.laserCharge:
         state.charge++;
+        if (state.charge >= 3) state.charge = 0;
         break;
       case MiniItemKind.missile:
         state.missiles++;

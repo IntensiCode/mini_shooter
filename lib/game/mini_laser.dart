@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import '../core/mini_common.dart';
 import '../core/mini_soundboard.dart';
 import 'mini_effects.dart';
+import 'mini_state.dart';
 
 class MiniLaser extends Component {
   MiniLaser(this.ship, this.shouldFire, this.level);
@@ -21,10 +22,11 @@ class MiniLaser extends Component {
       final it = _pool.isEmpty //
           ? MiniLaserShot(_recycle)
           : _pool.removeLast();
+      it.visual.sprite = sprites.getSprite(8, 3 + state.charge);
       it.position.setFrom(ship.position);
       level.add(it);
       soundboard.play(MiniSound.laser);
-      _coolDown = 0.2;
+      _coolDown = 0.2 + state.charge * 0.1;
     }
   }
 
@@ -41,8 +43,10 @@ class MiniLaser extends Component {
 class MiniLaserShot extends PositionComponent with CollisionCallbacks {
   MiniLaserShot(this._recycle) {
     add(RectangleHitbox(position: Vector2.zero(), size: Vector2.all(10), anchor: Anchor.center));
-    add(SpriteComponent(sprite: sprites.getSprite(8, 3), anchor: Anchor.center));
+    add(visual = SpriteComponent(anchor: Anchor.center));
   }
+
+  late final SpriteComponent visual;
 
   final void Function(MiniLaserShot) _recycle;
 
@@ -57,7 +61,7 @@ class MiniLaserShot extends PositionComponent with CollisionCallbacks {
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if (other case MiniTarget it) {
-      final destroyed = it.applyDamage(laser: 1);
+      final destroyed = it.applyDamage(laser: 1 + state.charge * 0.5);
       if (!destroyed) spawnEffect(MiniEffectKind.hit, position);
       _recycle(this);
     }
