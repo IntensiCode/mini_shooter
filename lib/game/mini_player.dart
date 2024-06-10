@@ -9,6 +9,7 @@ import '../scripting/mini_script.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
 import '../util/debug.dart';
+import '../util/extensions.dart';
 import '../util/input_acceleration.dart';
 import 'mini_effects.dart';
 import 'mini_laser.dart';
@@ -39,8 +40,11 @@ class MiniPlayer extends PositionComponent
 
   void vanish() {
     _state = _PlayerState.vanishing;
-    removeAll(children);
-    _showIncoming();
+    clearScript();
+    at(0.0, () => removeAll(children - ship));
+    at(0.0, () => _showIncoming());
+    at(0.5, () => ship.removeFromParent());
+    executeScript();
   }
 
   @override
