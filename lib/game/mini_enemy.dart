@@ -12,11 +12,11 @@ import '../util/auto_dispose.dart';
 import '../util/debug.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
-import 'mini_effects.dart';
 import 'mini_enemy_kind.dart';
 import 'mini_enemy_state.dart';
 import 'mini_extras.dart';
 import 'mini_state.dart';
+import 'mini_target.dart';
 
 class MiniEnemy extends PositionComponent
     with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, CollisionCallbacks {
@@ -25,7 +25,9 @@ class MiniEnemy extends PositionComponent
     this.position.setFrom(position);
   }
 
+  @override
   final MiniEnemyKind kind;
+
   final int level;
 
   late final void Function() onDefeated;
@@ -201,26 +203,11 @@ class MiniEnemy extends PositionComponent
   double _wandering = 0;
   static const _maxWandering = pi * 2;
 
-  double life = 3;
-
   @override
-  bool applyDamage({double? laser, double? missile}) {
-    life -= (laser ?? 0) + (missile ?? 0);
-    if (life <= 0) {
-      spawnEffect(MiniEffectKind.explosion, position);
-      if (random.nextInt(3) == 0) {
-        spawnItem(position);
-      }
-      removeFromParent();
-      soundboard.play(MiniSound.death);
-      state.score += kind.life * 10;
-      onDefeated();
-      return true;
-    } else {
-      soundboard.play(MiniSound.hit);
-      state.score++;
-      return false;
-    }
+  void whenDefeated() {
+    if (random.nextInt(3) == 0) spawnItem(position);
+    state.score += kind.life * 10;
+    onDefeated();
   }
 
   @override

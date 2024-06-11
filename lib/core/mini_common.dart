@@ -98,11 +98,6 @@ mixin Defender {
   bool onHit([int hits = 1]);
 }
 
-mixin MiniTarget {
-  /// returns true when destroyed
-  bool applyDamage({double? laser, double? missile});
-}
-
 sealed class MiniMessage {}
 
 class EnemiesDefeated extends MiniMessage {}

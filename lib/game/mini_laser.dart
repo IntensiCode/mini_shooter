@@ -5,6 +5,7 @@ import '../core/mini_common.dart';
 import '../core/mini_soundboard.dart';
 import 'mini_effects.dart';
 import 'mini_state.dart';
+import 'mini_target.dart';
 
 class MiniLaser extends Component {
   MiniLaser(this.ship, this.shouldFire, this.level);

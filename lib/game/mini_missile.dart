@@ -10,6 +10,7 @@ import '../core/mini_soundboard.dart';
 import '../util/debug.dart';
 import 'mini_effects.dart';
 import 'mini_state.dart';
+import 'mini_target.dart';
 
 class MiniMissile extends Component {
   MiniMissile(this.ship, this.shouldFire, this.level);
