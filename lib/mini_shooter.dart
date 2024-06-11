@@ -25,10 +25,7 @@ class MiniShooter extends FlameGame<MiniWorld>
     if (kIsWeb) {
       world.add(WebPlayScreen());
     } else {
-      logInfo('showSplash');
       world.showSplash();
-      // world.showTitle();
-      // world.showGame();
     }
   }
 
