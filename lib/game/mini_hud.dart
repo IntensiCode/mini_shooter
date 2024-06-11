@@ -5,6 +5,7 @@ import 'package:signals_core/signals_core.dart';
 import '../core/mini_common.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
+import '../util/extensions.dart';
 import 'mini_effects.dart';
 import 'mini_state.dart';
 
@@ -32,6 +33,8 @@ class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
     missiles = _place(10, 3, 70, state.data[MiniStateId.missiles]!, 'missiles');
 
     _trackExtraLives();
+
+    fadeInDeep(restart: true);
   }
 
   SpriteComponent _place(int row, int column, int offset, Signal<int> signal, String hint) {
