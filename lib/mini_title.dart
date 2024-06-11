@@ -16,7 +16,10 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
     super.onMount();
     onKey('<Space>', () {
       clearScript();
-      fadeOutAll(0.5);
+      for (final it in children) {
+        if (it is! PositionComponent) continue;
+        it.fadeOutDeep(seconds: 0.5);
+      }
       at(0.5, () => showScreen(Screen.game));
       executeScript();
     });

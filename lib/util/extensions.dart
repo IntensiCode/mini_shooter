@@ -30,14 +30,17 @@ extension ComponentExtension on Component {
     }
   }
 
-  void fadeOut({double seconds = 0.4, bool restart = true}) {
+  void fadeOutDeep({double seconds = 0.4, bool restart = true}) {
     if (this case OpacityProvider it) {
       if (it.opacity == 0 && !restart) return;
       it.opacity = 1;
+      add(OpacityEffect.to(0, EffectController(duration: seconds)));
     } else {
-      throw ArgumentError('Component has to be an OpacityProvider');
+      for (final it in children) {
+        if (it is! OpacityProvider) continue;
+        it.fadeOutDeep(seconds: seconds, restart: restart);
+      }
     }
-    add(OpacityEffect.to(0, EffectController(duration: seconds)));
   }
 
   void runScript(List<(int, void Function())> script) {

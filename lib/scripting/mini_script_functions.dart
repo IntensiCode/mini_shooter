@@ -113,14 +113,12 @@ mixin MiniScriptFunctions on Component, AutoDispose {
   }
 
   void fadeOutByType<T extends Component>([bool reset = true]) async {
-    children.whereType<T>().forEach((it) => it.fadeOut());
+    children.whereType<T>().forEach((it) => it.fadeOutDeep(restart: reset));
   }
 
   void fadeOutAll([double duration = 1]) {
     for (final it in children) {
-      if (it is! OpacityProvider) continue;
-      it.add(OpacityEffect.fadeOut(EffectController(duration: duration)));
-      it.add(RemoveEffect(delay: duration));
+      it.fadeOutDeep(seconds: duration);
     }
   }
 

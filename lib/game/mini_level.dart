@@ -38,7 +38,7 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     soundboard.play(MiniSound.game_on);
     at(0.1, () async => fadeIn(textXY('Level $level', xCenter, yCenter)));
     at(1.0, () async => fadeIn(textXY('Game on!', xCenter, yCenter + lineHeight)));
-    at(2.0, () async => fadeOutAll(0.5));
+    at(2.0, () async => fadeOutByType<BitmapText>());
     at(0.0, () async => add(_enemies = MiniEnemies(level: level)));
 
     onMessage<FormationComplete>((_) {
