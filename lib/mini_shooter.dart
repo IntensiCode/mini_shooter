@@ -78,6 +78,8 @@ class MiniShooter extends FlameGame<MiniWorld>
     if (dev) {
       onKey('<C-d>', () => _toggleDebug());
       onKey('<C-m>', () => soundboard.toggleMute());
+      onKey('<C-n>', () => world.nextLevel());
+      onKey('<C-p>', () => world.previousLevel());
       onKey('<C-0>', () => showScreen(Screen.title));
       onKey('<C-1>', () => showScreen(Screen.game));
       onKey('<C-->', () => _slowDown());
