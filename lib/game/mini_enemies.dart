@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -78,6 +79,18 @@ class MiniEnemies extends MiniScriptComponent {
   void onMount() {
     super.onMount();
     onMessage<PlayerDestroyed>((_) => _active = false);
+    onMessage<GetClosestEnemyPosition>((it) => _pickClosest(it.position, it.onResult));
+  }
+
+  void _pickClosest(Vector2 pos, Function(Vector2) onPick) {
+    final it = _enemies
+        .where((it) => it.position.y < pos.y)
+        .map((it) => (it, it.position.distanceToSquared(pos)))
+        .toList()
+        .sorted((a, b) => (a.$2 - b.$2).sign.toInt())
+        .firstOrNull;
+
+    if (it != null) onPick(it.$1.position);
   }
 
   @override

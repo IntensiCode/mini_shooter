@@ -25,7 +25,7 @@ next few days:
 * [ ] challenging stage every five levels
 * [ ] space worm for challenging stage
 * [X] collide player with attacking enemies
-* [ ] missiles! :-D
+* [X] missiles! :-D
 * [ ] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
 * [X] extra life
 

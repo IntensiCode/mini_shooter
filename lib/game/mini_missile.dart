@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:mini_shooter/util/debug.dart';
+import 'package:flutter/animation.dart';
 
 import '../core/mini_common.dart';
+import '../core/mini_messaging.dart';
 import '../core/mini_soundboard.dart';
+import '../util/debug.dart';
 import 'mini_effects.dart';
 import 'mini_state.dart';
 
@@ -86,6 +90,16 @@ class MiniMissileShot extends PositionComponent with CollisionCallbacks {
     } else {
       _smoke -= dt;
     }
+    if (homing) {
+      messaging.send(GetClosestEnemyPosition(position, (it) {
+        final distance = position.distanceTo(it);
+        final curveTime = (1 - distance / gameHeight).clamp(0, 1).toDouble();
+        final ease = Curves.easeInOut.transform(curveTime);
+        final xSpeed = min(5, ease * 10 * curveTime);
+        final xDist = it.x - position.x;
+        position.x += xDist * dt * xSpeed;
+      }));
+    }
   }
 
   double _smoke = 0;
@@ -93,7 +107,7 @@ class MiniMissileShot extends PositionComponent with CollisionCallbacks {
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other case MiniTarget it) {
+    if (other is MiniTarget) {
       parent!.add(Nuked(radius: 24, position: position));
       _recycle(this);
     }
