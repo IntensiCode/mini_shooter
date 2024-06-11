@@ -9,17 +9,17 @@ import '../core/mini_soundboard.dart';
 import '../scripting/mini_script.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
-import '../util/debug.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
 import 'mini_enemy_kind.dart';
 import 'mini_enemy_state.dart';
 import 'mini_extras.dart';
+import 'mini_make_enemy.dart';
 import 'mini_state.dart';
 import 'mini_target.dart';
 
 class MiniEnemy extends PositionComponent
-    with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, CollisionCallbacks {
+    with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, MiniMakeEnemy, CollisionCallbacks {
   //
   MiniEnemy(this.kind, this.level, Vector2 position) {
     this.position.setFrom(position);
@@ -65,9 +65,8 @@ class MiniEnemy extends PositionComponent
 
   @override
   void onLoad() {
-    life = kind.life.toDouble();
     at(0.0, () async => _showIncoming());
-    at(0.5, () async => _showEnemy());
+    at(0.5, () async => makeEnemy());
     at(1.5, () async => _activate());
     _basePos.setFrom(position);
   }
@@ -79,22 +78,6 @@ class MiniEnemy extends PositionComponent
       ..priority = 100
       ..removeOnFinish = true;
   }
-
-  _showEnemy() {
-    final anim = switch (kind) {
-      MiniEnemyKind.bonny => bonny(),
-      MiniEnemyKind.looker => looker(),
-      MiniEnemyKind.smiley => smiley(),
-    };
-
-    makeAnimXY(anim, 0, 0);
-
-    final radius = kind == MiniEnemyKind.smiley ? 7.0 : 6.0;
-    add(DebugCircleHitbox(radius: radius, anchor: Anchor.center));
-    add(_hitbox = CircleHitbox(radius: radius, anchor: Anchor.center, collisionType: CollisionType.passive));
-  }
-
-  late CircleHitbox _hitbox;
 
   _activate() => _state = MiniEnemyState.waiting;
 
@@ -139,7 +122,7 @@ class MiniEnemy extends PositionComponent
         // when leader is attacking, we clone its direction and follow independently:
         _state = MiniEnemyState.attacking;
         _attackDx = _leader!._attackDx;
-        _hitbox.collisionType = CollisionType.active;
+        hitbox.collisionType = CollisionType.active;
       }
     }
 
@@ -160,7 +143,7 @@ class MiniEnemy extends PositionComponent
 
         // after attack run, we go passive again. bullets are active. so
         // nothing for the enemy to do outside the attack run.
-        _hitbox.collisionType = CollisionType.passive;
+        hitbox.collisionType = CollisionType.passive;
       }
     }
     if (_state == MiniEnemyState.launching) {
@@ -172,7 +155,7 @@ class MiniEnemy extends PositionComponent
         _state = MiniEnemyState.attacking;
 
         // to collide with player, we switch to active during the attack run:
-        _hitbox.collisionType = CollisionType.active;
+        hitbox.collisionType = CollisionType.active;
       }
       position.x = _launched.x + cos(_launching) * _launchDistance * _launchDir - _launchDistance * _launchDir;
       position.y = _launched.y - sin(_launching).abs() * _launchDistance;
