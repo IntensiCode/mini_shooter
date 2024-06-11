@@ -151,12 +151,19 @@ class MiniEnemies extends MiniScriptComponent {
   void _sendFormation(double dt) {
     final attackers = _attackers;
     if (_sendFormationCoolDown <= 0 && attackers.length < _maxAttackers) {
-      final it = _waiting.where(_smiley).toList();
-      if (it.isNotEmpty) {
-        final leader = it.random(random);
+      final candidates = _waiting.where(_smiley).toList();
+      if (candidates.isNotEmpty) {
+        final leader = candidates.random(random);
         leader.startAttackRun();
-        final followers = _twoClosestTo(leader, _enemies.where(_notSmiley));
-        followers.forEachIndexed((i, it) => it.startFollowing(leader, i == 0 ? -1 : 1));
+        final followers = _twoClosestTo(leader, _enemies.where(_notSmiley)).toList();
+        if (followers.length == 2) {
+          followers.sort((a, b) => (a.position.x - b.position.x).sign.toInt());
+          followers.first.startFollowing(leader, -1);
+          followers.last.startFollowing(leader, 1);
+        } else if (followers.length == 1) {
+          final it = followers.single;
+          it.startFollowing(leader, it.x < leader.x ? -1 : 1);
+        }
         _sendFormationCoolDown = _formationCoolDown();
       }
     } else if (_sendFormationCoolDown > 0) {
@@ -168,7 +175,10 @@ class MiniEnemies extends MiniScriptComponent {
     final result = <(double, MiniEnemy)>[];
     // put distance to leader plus other into result:
     for (final it in others) {
-      result.add((leader.position.distanceToSquared(it.position), it));
+      final distance = leader.position.distanceTo(it.position);
+      if (distance > 32) continue;
+      logInfo('distance to ${it.kind}: $distance');
+      result.add((distance, it));
     }
     result.sort((a, b) => (a.$1 - b.$1).sign.toInt());
     return result.take(2).map((it) => it.$2);
@@ -282,20 +292,29 @@ class MiniEnemy extends PositionComponent
 
   static const _launchDistance = 32.0;
 
-  double get _launchSpeedInRad => (1.0 + level / 10).clamp(1, 5);
+  double get _launchSpeedInRad => (1.0 + level / 10).clamp(1, 2.5);
 
   double get _attackSpeed => (50.0 + level).clamp(50, 100);
 
   late double _attackDx;
 
   _moveTowards(Vector2 target, double dt, [double xOffset = 0]) {
-    final dx = target.x + xOffset - position.x;
-    if (position.x != target.x) {
-      position.x += dx.sign * dt * _attackSpeed;
+    final moveSpeedMultiplier = 1 + (level * 0.01).clamp(0, 2.5);
+    if ((position.x - target.x).abs() > 0.5) {
+      final dx = target.x + xOffset - position.x;
+      var todo = dx.sign * dt * _attackSpeed * 1.25 * moveSpeedMultiplier;
+      if (todo.abs() > dx.abs()) todo = dx;
+      position.x += todo;
+    } else {
+      position.x = target.x + xOffset;
     }
-    final dy = target.y - position.y;
-    if (position.y != target.y) {
-      position.y += dy.sign * dt * _attackSpeed;
+    if ((position.y - target.y).abs() > 0.5) {
+      final dy = target.y - position.y;
+      var todo = dy.sign * dt * _attackSpeed * 1.25 * moveSpeedMultiplier;
+      if (todo.abs() > dy.abs()) todo = dy;
+      position.y += todo;
+    } else {
+      position.y = target.y;
     }
   }
 
@@ -304,7 +323,7 @@ class MiniEnemy extends PositionComponent
     super.update(dt);
 
     if (_state == MiniEnemyState.preparing_to_follow) {
-      _moveTowards(_leader!.position, dt, _followSide * 16);
+      _moveTowards(_leader!.position, dt, _followSide * 20);
       if (_leader?.isMounted != true) {
         // if leader is destroyed, we go back to base:
         _state = MiniEnemyState.return_to_base;
