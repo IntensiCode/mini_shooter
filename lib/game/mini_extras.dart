@@ -16,15 +16,7 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 }
 
 extension ComponentExtensions on Component {
-  void spawnItem(MiniSpawnItem data) => messaging.send('spawn-item', data);
-}
-
-class MiniSpawnItem {
-  MiniSpawnItem(this.position, [this.speed, this.kind]);
-
-  final Vector2 position;
-  final double? speed;
-  final Set<MiniItemKind>? kind;
+  void spawnItem(Vector2 position) => messaging.send(SpawnItem(position));
 }
 
 class MiniItems extends MiniScriptComponent {
@@ -33,10 +25,9 @@ class MiniItems extends MiniScriptComponent {
   @override
   void onMount() {
     super.onMount();
-    onMessage('spawn-item', (message) {
-      final data = message as MiniSpawnItem;
-      final which = data.kind?.toList() ?? MiniItemKind.values;
-      _spawn(data.position, which.random(random), data.speed ?? 50);
+    onMessage<SpawnItem>((it) {
+      final which = it.kind?.toList() ?? MiniItemKind.values;
+      _spawn(it.position, which.random(random), it.speed ?? 50);
     });
   }
 

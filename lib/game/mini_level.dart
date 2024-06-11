@@ -9,6 +9,7 @@ import '../input/mini_game_keys.dart';
 import '../input/mini_shortcuts.dart';
 import '../scripting/mini_script.dart';
 import '../util/bitmap_text.dart';
+import '../util/extensions.dart';
 import 'mini_balls.dart';
 import 'mini_effects.dart';
 import 'mini_enemies.dart';
@@ -30,7 +31,6 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     backgroundMoons();
     backgroundAsteroids().maxAsteroids = 0;
 
-    add(MiniHud());
     _items = items();
     _balls = balls(level);
     effects();
@@ -41,9 +41,12 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     at(2.0, () async => fadeOutAll(0.5));
     at(0.0, () async => add(_enemies = MiniEnemies(level: level)));
 
-    onMessage('formation-complete', (_) => add(_player = MiniPlayer()));
-    onMessage('enemies-defeated', (_) => _awaitComplete = true);
-    onMessage('player-destroyed', (_) => _awaitRetry = true);
+    onMessage<FormationComplete>((_) {
+      add(_player = MiniPlayer());
+      add(MiniHud());
+    });
+    onMessage<EnemiesDefeated>((_) => _awaitComplete = true);
+    onMessage<PlayerDestroyed>((_) => _awaitRetry = true);
   }
 
   late MiniItems _items;

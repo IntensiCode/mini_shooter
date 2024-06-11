@@ -6,18 +6,9 @@ import '../core/mini_common.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
 import 'mini_effects.dart';
-import 'mini_player.dart';
 import 'mini_state.dart';
 
 class MiniHud extends PositionComponent with AutoDispose, MiniScriptFunctions {
-  MiniPlayer? player;
-
-  @override
-  void onMount() {
-    super.onMount();
-    onMessage('player-ready', (it) => player = it);
-  }
-
   static const xBase = xCenter - 15;
 
   @override

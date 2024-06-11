@@ -15,7 +15,7 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 }
 
 extension ComponentExtensions on Component {
-  void spawnBall(Vector2 position) => messaging.send('spawn-ball', position);
+  void spawnBall(Vector2 position) => messaging.send(SpawnBall(position));
 }
 
 class MiniBalls extends MiniScriptComponent {
@@ -28,7 +28,7 @@ class MiniBalls extends MiniScriptComponent {
   @override
   void onMount() {
     super.onMount();
-    onMessage('spawn-ball', (it) => _spawn(it));
+    onMessage<SpawnBall>((it) => _spawn(it.position));
   }
 
   void _spawn(Vector2 position) {

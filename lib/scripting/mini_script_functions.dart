@@ -45,10 +45,10 @@ mixin MiniScriptFunctions on Component, AutoDispose {
     _autoDisposeCount++;
   }
 
-  void sendMessage(String key, dynamic data) => messaging.send(key, data);
+  void sendMessage<T extends MiniMessage>(T message) => messaging.send(message);
 
-  void onMessage(String key, void Function(dynamic) callback) =>
-      autoDispose('listen-$key', messaging.listen(key, callback));
+  void onMessage<T extends MiniMessage>(void Function(T) callback) =>
+      autoDispose('listen-$T', messaging.listen<T>(callback));
 
   void clearByType(List types) {
     final what = types.isEmpty ? children : children.where((it) => types.contains(it.runtimeType));

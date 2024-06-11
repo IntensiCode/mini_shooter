@@ -6,8 +6,6 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../core/mini_messaging.dart';
-
 bool debug = kDebugMode;
 bool dev = kDebugMode;
 
@@ -66,10 +64,12 @@ enum Screen {
   title,
 }
 
-extension ComponentExtension on Component {
-  void nextLevel() => messaging.send('nextLevel', null);
-
-  void showScreen(Screen it) => messaging.send('screen', it);
+enum MiniEffectKind {
+  appear,
+  explosion,
+  hit,
+  smoke,
+  sparkle,
 }
 
 enum MiniItemKind {
@@ -97,4 +97,48 @@ mixin Defender {
 mixin MiniTarget {
   /// returns true when destroyed
   bool applyDamage({double? laser, double? missile});
+}
+
+sealed class MiniMessage {}
+
+class EnemiesDefeated extends MiniMessage {}
+
+class FormationComplete extends MiniMessage {}
+
+class GetClosestEnemyPosition extends MiniMessage {
+  GetClosestEnemyPosition(this.position, this.onResult);
+
+  final Vector2 position;
+  final void Function(Vector2) onResult;
+}
+
+class NextLevel extends MiniMessage {}
+
+class PlayerDestroyed extends MiniMessage {}
+
+class ShowScreen extends MiniMessage {
+  ShowScreen(this.screen);
+
+  final Screen screen;
+}
+
+class SpawnBall extends MiniMessage {
+  SpawnBall(this.position);
+
+  final Vector2 position;
+}
+
+class SpawnEffect extends MiniMessage {
+  SpawnEffect(this.kind, this.position);
+
+  final MiniEffectKind kind;
+  final Vector2 position;
+}
+
+class SpawnItem extends MiniMessage {
+  SpawnItem(this.position, [this.speed, this.kind]);
+
+  final Vector2 position;
+  final double? speed;
+  final Set<MiniItemKind>? kind;
 }

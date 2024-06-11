@@ -4,6 +4,7 @@ import 'package:flutter/animation.dart';
 import 'core/mini_common.dart';
 import 'input/mini_shortcuts.dart';
 import 'scripting/mini_script.dart';
+import 'util/extensions.dart';
 import 'util/fonts.dart';
 
 class MiniSplash extends MiniScriptComponent with HasAutoDisposeShortcuts {

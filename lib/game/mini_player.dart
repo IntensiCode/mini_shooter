@@ -107,12 +107,6 @@ class MiniPlayer extends PositionComponent
   }
 
   @override
-  void onMount() {
-    super.onMount();
-    sendMessage('player-ready', this);
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
     if (_state == _PlayerState.playing) _onPlaying(dt);
@@ -162,7 +156,7 @@ class MiniPlayer extends PositionComponent
       state.lives--;
       state.shields = 0;
       state.missiles = 0;
-      sendMessage('player-destroyed', null);
+      sendMessage(PlayerDestroyed());
       spawnEffect(MiniEffectKind.explosion, position);
       soundboard.play(MiniSound.explosion);
       removeFromParent();

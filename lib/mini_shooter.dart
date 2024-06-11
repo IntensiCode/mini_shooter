@@ -12,6 +12,7 @@ import 'core/mini_messaging.dart';
 import 'core/mini_soundboard.dart';
 import 'input/mini_shortcuts.dart';
 import 'mini_world.dart';
+import 'util/extensions.dart';
 import 'util/fonts.dart';
 import 'util/performance.dart';
 

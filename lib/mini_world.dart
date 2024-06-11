@@ -13,8 +13,8 @@ class MiniWorld extends World {
 
   @override
   void onLoad() {
-    messaging.listen('nextLevel', (_) => nextLevel());
-    messaging.listen('screen', (it) => _showScreen(it));
+    messaging.listen<NextLevel>((_) => nextLevel());
+    messaging.listen<ShowScreen>((it) => _showScreen(it.screen));
   }
 
   void _showScreen(Screen it) {

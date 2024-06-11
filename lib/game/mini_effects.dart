@@ -12,15 +12,7 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 }
 
 extension ComponentExtensions on Component {
-  void spawnEffect(MiniEffectKind kind, Vector2 position) => messaging.send('spawn-effect', (kind, position));
-}
-
-enum MiniEffectKind {
-  appear,
-  explosion,
-  hit,
-  smoke,
-  sparkle,
+  void spawnEffect(MiniEffectKind kind, Vector2 position) => messaging.send(SpawnEffect(kind, position));
 }
 
 class MiniEffects extends MiniScriptComponent {
@@ -42,12 +34,11 @@ class MiniEffects extends MiniScriptComponent {
   @override
   void onMount() {
     super.onMount();
-    onMessage('spawn-effect', (data) {
-      final anim = animations[data.$1]!;
+    onMessage<SpawnEffect>((data) {
       final it = _pool.removeLastOrNull() ?? MiniEffect(_recycle);
-      it.kind = data.$1;
-      it.animation = anim;
-      it.position.setFrom(data.$2);
+      it.kind = data.kind;
+      it.animation = animations[data.kind]!;
+      it.position.setFrom(data.position);
       add(it);
     });
   }

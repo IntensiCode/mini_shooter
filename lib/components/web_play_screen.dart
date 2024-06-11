@@ -4,6 +4,7 @@ import '../../util/auto_dispose.dart';
 import '../core/mini_common.dart';
 import '../input/mini_shortcuts.dart';
 import '../util/bitmap_button.dart';
+import '../util/extensions.dart';
 import '../util/fonts.dart';
 
 class WebPlayScreen extends AutoDisposeComponent with HasAutoDisposeShortcuts {

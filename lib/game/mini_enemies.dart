@@ -59,13 +59,13 @@ class MiniEnemies extends MiniScriptComponent {
         at(0.1, () => add(MiniEnemy(data.$2, level, _onDefeated)..position.setFrom(xy)));
       }
     }
-    at(0.5, () => messaging.send('formation-complete', null));
+    at(0.5, () => messaging.send(FormationComplete()));
     at(0.5, () => reactivate());
   }
 
   void _onDefeated() {
     logInfo('enemy defeated ${children.length}');
-    if (children.length <= 1) sendMessage('enemies-defeated', null);
+    if (children.length <= 1) sendMessage(EnemiesDefeated());
   }
 
   void reactivate() => _active = true;
@@ -77,7 +77,7 @@ class MiniEnemies extends MiniScriptComponent {
   @override
   void onMount() {
     super.onMount();
-    onMessage('player-destroyed', (_) => _active = false);
+    onMessage<PlayerDestroyed>((_) => _active = false);
   }
 
   @override
@@ -274,7 +274,7 @@ class MiniEnemy extends PositionComponent
     if (life <= 0) {
       spawnEffect(MiniEffectKind.explosion, position);
       if (random.nextInt(3) == 0) {
-        spawnItem(MiniSpawnItem(position));
+        spawnItem(position);
       }
       removeFromParent();
       soundboard.play(MiniSound.death);

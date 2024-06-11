@@ -4,7 +4,14 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
-extension ComponentExtensions on Component {
+import '../core/mini_common.dart';
+import '../core/mini_messaging.dart';
+
+extension ComponentExtension on Component {
+  void nextLevel() => messaging.send(NextLevel());
+
+  void showScreen(Screen it) => messaging.send(ShowScreen(it));
+
   T added<T extends Component>(T it) {
     add(it);
     return it;

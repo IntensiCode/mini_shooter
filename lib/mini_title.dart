@@ -8,6 +8,7 @@ import '../util/fonts.dart';
 import 'core/mini_common.dart';
 import 'game/mini_state.dart';
 import 'scripting/mini_script.dart';
+import 'util/extensions.dart';
 
 class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
   @override

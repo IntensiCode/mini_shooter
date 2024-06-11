@@ -1,6 +1,7 @@
 import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/components.dart';
 
+import '../core/mini_common.dart';
 import '../util/auto_dispose.dart';
 
 // there are better solutions available than this. but this works for the
@@ -18,18 +19,20 @@ extension ComponentExtension on Component {
 }
 
 mixin MiniMessaging on Component {
-  final listeners = <String, List<Function(dynamic)>>{};
+  final listeners = <Type, List<dynamic>>{};
 
-  Disposable listen(String key, void Function(dynamic) callback) {
-    listeners[key] ??= [];
-    listeners[key]!.add(callback);
-    return Disposable.wrap(() => listeners[key]?.remove(callback));
+  Disposable listen<T extends MiniMessage>(void Function(T) callback) {
+    listeners[T] ??= [];
+    listeners[T]!.add(callback);
+    return Disposable.wrap(() {
+      listeners[T]?.remove(callback);
+    });
   }
 
-  void send(String key, dynamic message) {
-    final listener = listeners[key];
+  void send<T extends MiniMessage>(T message) {
+    final listener = listeners[T];
     if (listener == null || listener.isEmpty) {
-      logWarn('no listener for $key');
+      logWarn('no listener for $T in $listeners');
     } else {
       listener.forEach((it) => it(message));
     }
