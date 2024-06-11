@@ -45,8 +45,10 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
 
     loopAt(0.0, () {
       Component? showing;
+      at(1.0, () => add(showing = fadeIn(Credits())));
+      at(15.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Controls())));
-      at(10.0, () => showing?.fadeOutDeep(andRemove: true));
+      at(15.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Entities())));
       at(8.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Projectiles())));
@@ -139,5 +141,26 @@ class Controls extends InfoScreen {
     addText('');
     addText('Toggle mute: m');
     addText('Back to title: t');
+  }
+}
+
+class Credits extends InfoScreen {
+  @override
+  onLoad() async {
+    super.onLoad();
+    _addPos.y -= lineHeight * 2;
+    addText('Gfx By:');
+    addText('GrafxKid (itch.io)');
+    addText('&');
+    addText('The.French.DJ');
+    addText('');
+    addText('Background music By:');
+    addText('Suno.com');
+    addText('');
+    addText('Sfx By:');
+    addText('sfxr.me & The.French.DJ');
+    addText('');
+    addText('Asteroid Shader By;');
+    addText('Deep-Fold (itch.io)');
   }
 }
