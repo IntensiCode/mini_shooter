@@ -79,6 +79,7 @@ class MiniEnemies extends MiniScriptComponent {
   bool _active = false;
   double _fireAtWillCoolDown = 0;
   late double _sendAttackerCoolDown = _attackerCoolDown();
+  late double _sendFormationCoolDown = _formationCoolDown();
 
   @override
   void onMount() {
@@ -103,6 +104,7 @@ class MiniEnemies extends MiniScriptComponent {
     super.update(dt);
     if (_active) _onFireAtWill(dt);
     if (_active) _sendAttacker(dt);
+    if (_active) _sendFormation(dt);
   }
 
   Iterable<MiniEnemy> get _enemies => children.whereType<MiniEnemy>();
@@ -132,13 +134,43 @@ class MiniEnemies extends MiniScriptComponent {
     }
   }
 
+  void _sendFormation(double dt) {
+    final attackers = _attackers;
+    if (_sendFormationCoolDown <= 0 && attackers.length < _maxAttackers) {
+      final it = _waiting.where(_smiley).toList();
+      if (it.isNotEmpty) {
+        final leader = it.random(random);
+        leader.startAttackRun();
+        final followers = _twoClosestTo(leader, _enemies.where(_notSmiley));
+        followers.forEachIndexed((i, it) => it.startFollowing(leader, i == 0 ? -1 : 1));
+        _sendFormationCoolDown = _formationCoolDown();
+      }
+    } else if (_sendFormationCoolDown > 0) {
+      _sendFormationCoolDown -= dt;
+    }
+  }
+
+  Iterable<MiniEnemy> _twoClosestTo(MiniEnemy leader, Iterable<MiniEnemy> others) {
+    final result = <(double, MiniEnemy)>[];
+    // put distance to leader plus other into result:
+    for (final it in others) {
+      result.add((leader.position.distanceToSquared(it.position), it));
+    }
+    result.sort((a, b) => (a.$1 - b.$1).sign.toInt());
+    return result.take(2).map((it) => it.$2);
+  }
+
+  bool _smiley(MiniEnemy it) => it.kind == MiniEnemyKind.smiley;
+
   bool _notSmiley(MiniEnemy it) => it.kind != MiniEnemyKind.smiley;
 
   Iterable<MiniEnemy> get _waiting => _enemies.where(_isWaiting);
 
   double _attackerCoolDown() => (8 - level / 4).clamp(2, 8);
 
-  int get _maxAttackers => (level / 5).clamp(1, 3).toInt();
+  double _formationCoolDown() => (12 - level / 6).clamp(2, 12);
+
+  int get _maxAttackers => (level / 3).clamp(1, 4).toInt();
 }
 
 enum MiniEnemyKind {
@@ -154,8 +186,11 @@ enum MiniEnemyKind {
 
 enum MiniEnemyState {
   attacking,
+  following,
   incoming,
   launching,
+  preparing_to_follow,
+  return_to_base,
   settling,
   waiting,
 }
@@ -182,6 +217,15 @@ class MiniEnemy extends PositionComponent
     _launched.setFrom(position);
     soundboard.play(MiniSound.launch);
   }
+
+  void startFollowing(MiniEnemy leader, int side) {
+    _leader = leader;
+    _followSide = side;
+    _state = MiniEnemyState.preparing_to_follow;
+  }
+
+  MiniEnemy? _leader;
+  late int _followSide;
 
   late double _launching;
   late double _launchDir;
@@ -230,9 +274,41 @@ class MiniEnemy extends PositionComponent
 
   late double _attackDx;
 
+  _moveTowards(Vector2 target, double dt, [double xOffset = 0]) {
+    final dx = target.x + xOffset - position.x;
+    if (position.x != target.x) {
+      position.x += dx.sign * dt * _attackSpeed;
+    }
+    final dy = target.y - position.y;
+    if (position.y != target.y) {
+      position.y += dy.sign * dt * _attackSpeed;
+    }
+  }
+
   @override
   update(double dt) {
     super.update(dt);
+
+    if (_state == MiniEnemyState.preparing_to_follow) {
+      _moveTowards(_leader!.position, dt, _followSide * 16);
+      if (_leader?.isMounted != true) {
+        // if leader is destroyed, we go back to base:
+        _state = MiniEnemyState.return_to_base;
+      } else if (_leader?._state == MiniEnemyState.attacking) {
+        // when leader is attacking, we clone its direction and follow independently:
+        _state = MiniEnemyState.attacking;
+        _attackDx = _leader!._attackDx;
+        _hitbox.collisionType = CollisionType.active;
+      }
+    }
+
+    if (_state == MiniEnemyState.return_to_base) {
+      _moveTowards(_basePos, dt, sin(_wandering) * 8);
+      if (position.distanceTo(_basePos) < 1) {
+        _state = MiniEnemyState.settling;
+      }
+    }
+
     if (_state == MiniEnemyState.attacking) {
       position.x += _attackDx * dt;
       position.y += dt * _attackSpeed;

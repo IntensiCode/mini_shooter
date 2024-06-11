@@ -18,9 +18,7 @@ next few days:
 * [X] laser charge extra => laser recharge rate
 * [X] have enemies wander left/right a bit
 * [X] have single enemies attack galaga style
-* [ ] have combined enemy attacks galaga style
-* [ ] maybe add space invaders ufo
-* [ ] maybe add special bigger enemy for the combined attack
+* [X] have combined enemy attacks galaga style
 * [ ] use tiled for the levels
 * [ ] challenging stage every five levels
 * [ ] space worm for challenging stage
@@ -29,6 +27,13 @@ next few days:
 * [X] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
 * [X] extra life
 * [X] fix end of level logic when being killed by killing last enemy
+
+Most probably not:
+
+* [ ] maybe have smiley capture player
+* [ ] maybe have double player after freeing caught player
+* [ ] maybe add space invaders ufo
+* [ ] maybe add special bigger enemy for the combined attack
 
 No promises!
 
