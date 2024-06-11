@@ -17,14 +17,17 @@ extension ComponentExtension on Component {
     return it;
   }
 
-  void fadeIn({double seconds = 0.4, bool restart = true}) {
+  void fadeInDeep({double seconds = 0.4, bool restart = true}) {
     if (this case OpacityProvider it) {
       if (it.opacity == 1 && !restart) return;
       it.opacity = 0;
+      add(OpacityEffect.to(1, EffectController(duration: seconds)));
     } else {
-      throw ArgumentError('Component has to be an OpacityProvider');
+      for (final it in children) {
+        if (it is! OpacityProvider) continue;
+        it.fadeInDeep(seconds: seconds, restart: restart);
+      }
     }
-    add(OpacityEffect.to(1, EffectController(duration: seconds)));
   }
 
   void fadeOut({double seconds = 0.4, bool restart = true}) {

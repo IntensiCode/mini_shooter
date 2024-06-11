@@ -61,7 +61,7 @@ mixin MiniScriptFunctions on Component, AutoDispose {
   }
 
   T fadeIn<T extends Component>(T it, {double duration = 1}) {
-    it.fadeIn(seconds: duration);
+    it.fadeInDeep(seconds: duration);
     return it;
   }
 
@@ -109,7 +109,7 @@ mixin MiniScriptFunctions on Component, AutoDispose {
       added(await loadSprite(filename, position: Vector2(x, y), anchor: anchor));
 
   void fadeInByType<T extends Component>([bool reset = true]) async {
-    children.whereType<T>().forEach((it) => it.fadeIn(restart: reset));
+    children.whereType<T>().forEach((it) => it.fadeInDeep(restart: reset));
   }
 
   void fadeOutByType<T extends Component>([bool reset = true]) async {
