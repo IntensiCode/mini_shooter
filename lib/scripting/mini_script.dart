@@ -6,11 +6,15 @@ import 'mini_script_functions.dart';
 class MiniScriptComponent extends AutoDisposeComponent with MiniScriptFunctions, MiniScript {}
 
 mixin MiniScript on AutoDispose, MiniScriptFunctions {
-  final script = <Future Function()>[];
+  var script = <Future Function()>[];
 
   StreamSubscription? active;
 
-  void clearScript() => script.clear();
+  void clearScript() {
+    active?.cancel();
+    active = null;
+    script = [];
+  }
 
   void at(double deltaSeconds, Function() execute) {
     script.add(() async {
@@ -19,6 +23,16 @@ mixin MiniScript on AutoDispose, MiniScriptFunctions {
         if (!isMounted) return;
         return await execute();
       });
+    });
+  }
+
+  loopAt(double deltaSeconds, Function() body) {
+    at(deltaSeconds, () async {
+      while (isMounted) {
+        clearScript();
+        body();
+        await executeScript().asFuture();
+      }
     });
   }
 
