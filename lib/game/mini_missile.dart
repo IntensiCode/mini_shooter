@@ -72,7 +72,7 @@ class MiniMissile extends Component {
 class MiniMissileShot extends PositionComponent with CollisionCallbacks {
   MiniMissileShot(this._recycle) {
     add(RectangleHitbox(position: Vector2.zero(), size: Vector2.all(10), anchor: Anchor.center));
-    add(SpriteComponent(sprite: sprites.getSprite(10, 3), anchor: Anchor.center));
+    add(SpriteAnimationComponent(animation: missile(), anchor: Anchor.center));
   }
 
   bool homing = true;
