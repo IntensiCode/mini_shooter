@@ -140,7 +140,7 @@ class MiniPlayer extends PositionComponent
         state.score += 20;
         break;
       case MiniItemKind.score3:
-        state.score += 30;
+        state.score += 50;
         break;
     }
   }
