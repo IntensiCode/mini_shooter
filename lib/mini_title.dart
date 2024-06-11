@@ -43,25 +43,97 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
     at(0.1, () async => fadeIn(textXY('Mini Shooter', xCenter, lineHeight * 3, anchor: Anchor.topCenter)));
     at(0.1, () => pressFireToStart());
 
-    _addEntry(bonny(), 'Bonny');
-    _addEntry(looker(), 'Looker');
-    _addEntry(smiley(), 'Smiley');
-    _addYou(sprites.getSprite(0, 4));
+    loopAt(0.0, () {
+      Component? showing;
+      at(1.0, () => add(showing = fadeIn(Entities())));
+      at(8.0, () => showing?.fadeOutDeep(andRemove: true));
+      at(1.0, () => add(showing = fadeIn(Projectiles())));
+      at(8.0, () => showing?.fadeOutDeep(andRemove: true));
+      at(1.0, () => add(showing = fadeIn(Items())));
+      at(12.0, () => showing?.fadeOutDeep(andRemove: true));
+      at(1.0, () => add(showing = fadeIn(Controls())));
+      at(10.0, () => showing?.fadeOutDeep(andRemove: true));
+    });
+  }
+}
+
+abstract class InfoScreen extends MiniScriptComponent {
+  void addText(String text) {
+    at(0.1, () async => fadeIn(textXY(text, _addPos.x - 16, _addPos.y, scale: 1)));
+    at(0.1, () => _addPos.y += lineHeight);
   }
 
-  void _addEntry(SpriteAnimation anim, String label) {
+  void addEntry(SpriteAnimation anim, String label) {
     at(0.1, () async => fadeIn(makeAnimXY(anim, _addPos.x - _spriteOffset, _addPos.y)));
     at(0.1, () async => fadeIn(textXY(label, _addPos.x, _addPos.y, scale: 1)));
     at(0.1, () => _addPos.y += lineHeight * 2);
   }
 
-  void _addYou(Sprite you) {
+  void addItem(MiniItemKind kind, String label) {
+    final sprite = sprites.getSprite(5, 3 + kind.index);
+    at(0.1, () async => fadeIn(spriteSXY(sprite, _addPos.x - _spriteOffset, _addPos.y)));
+    at(0.1, () async => fadeIn(textXY(label, _addPos.x, _addPos.y, scale: 1)));
     at(0.1, () => _addPos.y += lineHeight * 2);
-    at(0.1, () async => fadeIn(spriteSXY(you, _addPos.x - _spriteOffset, _addPos.y)));
-    at(0.1, () async => fadeIn(textXY('You', _addPos.x, _addPos.y, scale: 1)));
   }
 
   final _addPos = Vector2(gameWidth / 2 + 16, lineHeight * 8);
 
   static const _spriteOffset = 64;
+}
+
+class Entities extends InfoScreen {
+  @override
+  onLoad() async {
+    super.onLoad();
+    addEntry(bonny(), 'Bonny');
+    addEntry(looker(), 'Looker');
+    addEntry(smiley(), 'Smiley');
+    addYou(sprites.getSprite(0, 4));
+  }
+
+  void addYou(Sprite you) {
+    at(0.1, () => _addPos.y += lineHeight * 2);
+    at(0.1, () async => fadeIn(spriteSXY(you, _addPos.x - InfoScreen._spriteOffset, _addPos.y)));
+    at(0.1, () async => fadeIn(textXY('You', _addPos.x, _addPos.y, scale: 1)));
+  }
+}
+
+class Projectiles extends InfoScreen {
+  @override
+  onLoad() async {
+    super.onLoad();
+    addEntry(energyBall(), 'Energy Ball');
+    addEntry(laser(), 'Laser Types');
+    addEntry(missile(), 'Atomic Missile');
+    addEntry(shield(), 'Shield');
+  }
+}
+
+class Items extends InfoScreen {
+  @override
+  onLoad() async {
+    super.onLoad();
+    _addPos.y -= lineHeight;
+    addItem(MiniItemKind.laserCharge, 'Switch Laser');
+    addItem(MiniItemKind.shield, '+ 1 Shield');
+    addItem(MiniItemKind.missile, '+ 1 Missile');
+    addItem(MiniItemKind.score1, '+ 10 Score');
+    addItem(MiniItemKind.score2, '+ 20 Score');
+    addItem(MiniItemKind.score3, '+ 50 Score');
+  }
+}
+
+class Controls extends InfoScreen {
+  @override
+  onLoad() async {
+    super.onLoad();
+    addText('Move your ship:');
+    addText('Cursor Left/Right or a/d');
+    addText('');
+    addText('Fire laser:');
+    addText('Space or Control or j');
+    addText('');
+    addText('Fire missile:');
+    addText('Shift or k');
+  }
 }

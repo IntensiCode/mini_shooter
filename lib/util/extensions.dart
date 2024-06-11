@@ -30,7 +30,7 @@ extension ComponentExtension on Component {
     }
   }
 
-  void fadeOutDeep({double seconds = 0.4, bool restart = true}) {
+  void fadeOutDeep({double seconds = 0.4, bool restart = true, bool andRemove = true}) {
     if (this case OpacityProvider it) {
       if (it.opacity == 0 && !restart) return;
       it.opacity = 1;
@@ -41,6 +41,7 @@ extension ComponentExtension on Component {
         it.fadeOutDeep(seconds: seconds, restart: restart);
       }
     }
+    if (andRemove) add(RemoveEffect(delay: seconds));
   }
 
   void runScript(List<(int, void Function())> script) {

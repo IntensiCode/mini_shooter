@@ -46,6 +46,8 @@ SpriteAnimation sparkle() => sprites.createAnimation(row: 7, stepTime: 0.1, from
 
 SpriteAnimation hit() => sprites.createAnimation(row: 9, stepTime: 0.05, from: 3, to: 9)..loop = false;
 
+SpriteAnimation laser() => sprites.createAnimation(row: 8, stepTime: 1.0, from: 3, to: 6);
+
 SpriteAnimation missile() => sprites.createAnimation(row: 10, stepTime: 0.1, from: 3, to: 7);
 
 SpriteAnimation energyBall() => sprites.createAnimation(row: 11, stepTime: 0.1, from: 3, to: 7);

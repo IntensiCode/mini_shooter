@@ -26,7 +26,7 @@ next few days:
 * [ ] space worm for challenging stage
 * [X] collide player with attacking enemies
 * [X] missiles! :-D
-* [ ] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
+* [X] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
 * [X] extra life
 
 No promises!
