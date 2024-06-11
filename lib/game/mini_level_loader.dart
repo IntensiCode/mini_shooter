@@ -5,11 +5,19 @@ import 'package:flame_tiled/flame_tiled.dart';
 
 import '../scripting/mini_script.dart';
 import '../util/tiled_extensions.dart';
-import 'mini_enemies.dart';
+import 'mini_enemy.dart';
+import 'mini_enemy_kind.dart';
 
 // TODO set when tilemap is loaded
 // required to be correct to map the tile id onto an enemy kind:
 const _tileSetWidth = 11;
+
+// lookup table: row in tile map to enemy kind:
+final _lookup = <int, MiniEnemyKind>{
+  2: MiniEnemyKind.bonny,
+  3: MiniEnemyKind.looker,
+  4: MiniEnemyKind.smiley,
+};
 
 // this will be set the first time a non-existing level is encountered:
 int? _wrapAt;

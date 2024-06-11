@@ -14,6 +14,7 @@ import '../util/extensions.dart';
 import 'mini_balls.dart';
 import 'mini_effects.dart';
 import 'mini_enemies.dart';
+import 'mini_enemy.dart';
 import 'mini_extras.dart';
 import 'mini_hud.dart';
 import 'mini_player.dart';

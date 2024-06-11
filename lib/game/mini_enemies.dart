@@ -1,24 +1,14 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:dart_minilog/dart_minilog.dart';
-import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
-import '../core/mini_soundboard.dart';
 import '../scripting/mini_script.dart';
-import '../scripting/mini_script_functions.dart';
-import '../util/auto_dispose.dart';
-import '../util/debug.dart';
-import '../util/extensions.dart';
 import '../util/random.dart';
 import 'mini_balls.dart';
-import 'mini_effects.dart';
-import 'mini_extras.dart';
-import 'mini_state.dart';
+import 'mini_enemy.dart';
+import 'mini_enemy_kind.dart';
 
 class MiniEnemies extends MiniScriptComponent {
   MiniEnemies({required this.level, required this.formation});
@@ -29,11 +19,7 @@ class MiniEnemies extends MiniScriptComponent {
 
   bool get hasActiveEnemies => _active && _attackers.isNotEmpty;
 
-  Iterable<MiniEnemy> get _attackers => _enemies.where(_isActive);
-
-  bool _isActive(MiniEnemy it) => it._state != MiniEnemyState.waiting;
-
-  bool _isWaiting(MiniEnemy it) => it._state == MiniEnemyState.waiting;
+  Iterable<MiniEnemy> get _attackers => _enemies.where((it) => it.isActive);
 
   @override
   void onLoad() async {
@@ -48,7 +34,6 @@ class MiniEnemies extends MiniScriptComponent {
 
   void _onDefeated() {
     logInfo('enemy defeated ${children.length}');
-    logInfo('enemy defeated ${children.map((it) => (it as MiniEnemy)._state)}');
     if (children.length <= 1) sendMessage(EnemiesDefeated());
   }
 
@@ -152,244 +137,11 @@ class MiniEnemies extends MiniScriptComponent {
 
   bool _notSmiley(MiniEnemy it) => it.kind != MiniEnemyKind.smiley;
 
-  Iterable<MiniEnemy> get _waiting => _enemies.where(_isWaiting);
+  Iterable<MiniEnemy> get _waiting => _enemies.where((it) => it.isWaiting);
 
   double _attackerCoolDown() => (8 - level / 4).clamp(2, 8);
 
   double _formationCoolDown() => (19 - level / 6).clamp(2, 19);
 
   int get _maxAttackers => (level / 3).clamp(1, 4).toInt();
-}
-
-enum MiniEnemyKind {
-  bonny(2),
-  looker(3),
-  smiley(4),
-  ;
-
-  final int life;
-
-  const MiniEnemyKind(this.life);
-}
-
-enum MiniEnemyState {
-  attacking,
-  following,
-  incoming,
-  launching,
-  preparing_to_follow,
-  return_to_base,
-  settling,
-  waiting,
-}
-
-class MiniEnemy extends PositionComponent
-    with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, CollisionCallbacks {
-  //
-  MiniEnemy(this.kind, this.level, Vector2 position) {
-    this.position.setFrom(position);
-  }
-
-  final MiniEnemyKind kind;
-  final int level;
-
-  late final void Function() onDefeated;
-
-  MiniEnemyState _state = MiniEnemyState.incoming;
-
-  void startAttackRun() {
-    logInfo('attack run');
-    size.setAll(8);
-    _state = MiniEnemyState.launching;
-    _launching = 0;
-    _launchDir = random.nextBool() ? 1 : -1;
-    if (position.x < gameWidth / 4) _launchDir = -1;
-    if (position.x > gameWidth * 3 / 4) _launchDir = 1;
-    _launched.setFrom(position);
-    soundboard.play(MiniSound.launch);
-  }
-
-  void startFollowing(MiniEnemy leader, int side) {
-    _leader = leader;
-    _followSide = side;
-    _state = MiniEnemyState.preparing_to_follow;
-  }
-
-  MiniEnemy? _leader;
-  late int _followSide;
-
-  late double _launching;
-  late double _launchDir;
-  final _launched = Vector2.zero();
-
-  @override
-  void onLoad() {
-    life = kind.life.toDouble();
-    at(0.0, () async => _showIncoming());
-    at(0.5, () async => _showEnemy());
-    at(1.5, () async => _activate());
-    _basePos.setFrom(position);
-  }
-
-  final _basePos = Vector2.zero();
-
-  _showIncoming() {
-    makeAnimXY(appear()..loop = false, 0, 0)
-      ..priority = 100
-      ..removeOnFinish = true;
-  }
-
-  _showEnemy() {
-    final anim = switch (kind) {
-      MiniEnemyKind.bonny => bonny(),
-      MiniEnemyKind.looker => looker(),
-      MiniEnemyKind.smiley => smiley(),
-    };
-
-    makeAnimXY(anim, 0, 0);
-
-    final radius = kind == MiniEnemyKind.smiley ? 7.0 : 6.0;
-    add(DebugCircleHitbox(radius: radius, anchor: Anchor.center));
-    add(_hitbox = CircleHitbox(radius: radius, anchor: Anchor.center, collisionType: CollisionType.passive));
-  }
-
-  late CircleHitbox _hitbox;
-
-  _activate() => _state = MiniEnemyState.waiting;
-
-  static const _launchDistance = 32.0;
-
-  double get _launchSpeedInRad => (1.0 + level / 10).clamp(1, 2.5);
-
-  double get _attackSpeed => (50.0 + level).clamp(50, 100);
-
-  late double _attackDx;
-
-  _moveTowards(Vector2 target, double dt, [double xOffset = 0]) {
-    final moveSpeedMultiplier = 1 + (level * 0.01).clamp(0, 2.5);
-    if ((position.x - target.x).abs() > 0.5) {
-      final dx = target.x + xOffset - position.x;
-      var todo = dx.sign * dt * _attackSpeed * 1.25 * moveSpeedMultiplier;
-      if (todo.abs() > dx.abs()) todo = dx;
-      position.x += todo;
-    } else {
-      position.x = target.x + xOffset;
-    }
-    if ((position.y - target.y).abs() > 0.5) {
-      final dy = target.y - position.y;
-      var todo = dy.sign * dt * _attackSpeed * 1.25 * moveSpeedMultiplier;
-      if (todo.abs() > dy.abs()) todo = dy;
-      position.y += todo;
-    } else {
-      position.y = target.y;
-    }
-  }
-
-  @override
-  update(double dt) {
-    super.update(dt);
-
-    if (_state == MiniEnemyState.preparing_to_follow) {
-      _moveTowards(_leader!.position, dt, _followSide * 20);
-      if (_leader?.isMounted != true) {
-        // if leader is destroyed, we go back to base:
-        _state = MiniEnemyState.return_to_base;
-      } else if (_leader?._state == MiniEnemyState.attacking) {
-        // when leader is attacking, we clone its direction and follow independently:
-        _state = MiniEnemyState.attacking;
-        _attackDx = _leader!._attackDx;
-        _hitbox.collisionType = CollisionType.active;
-      }
-    }
-
-    if (_state == MiniEnemyState.return_to_base) {
-      _moveTowards(_basePos, dt, sin(_wandering) * 8);
-      if (position.distanceTo(_basePos) < 1) {
-        _state = MiniEnemyState.settling;
-      }
-    }
-
-    if (_state == MiniEnemyState.attacking) {
-      position.x += _attackDx * dt;
-      position.y += dt * _attackSpeed;
-      if (position.y > gameHeight + size.y) {
-        position.x = _basePos.x;
-        position.y = -size.y;
-        _state = MiniEnemyState.settling;
-
-        // after attack run, we go passive again. bullets are active. so
-        // nothing for the enemy to do outside the attack run.
-        _hitbox.collisionType = CollisionType.passive;
-      }
-    }
-    if (_state == MiniEnemyState.launching) {
-      _launching += dt * _launchSpeedInRad;
-      if (_launching.abs() >= pi) {
-        _launching = pi * _launching.sign;
-        _attackDx = position.x < gameWidth / 2 ? 1 : -1;
-        _attackDx *= 5 + random.nextDoubleLimit(5);
-        _state = MiniEnemyState.attacking;
-
-        // to collide with player, we switch to active during the attack run:
-        _hitbox.collisionType = CollisionType.active;
-      }
-      position.x = _launched.x + cos(_launching) * _launchDistance * _launchDir - _launchDistance * _launchDir;
-      position.y = _launched.y - sin(_launching).abs() * _launchDistance;
-    }
-    if (_state == MiniEnemyState.settling) {
-      position.x = _basePos.x + sin(_wandering) * 8;
-      position.y += dt * _attackSpeed;
-      if (position.y >= _basePos.y) {
-        position.y = _basePos.y;
-        _state = MiniEnemyState.waiting;
-      }
-    }
-
-    // we do this always, unless incoming, to keep in sync:
-    if (_state != MiniEnemyState.incoming) {
-      _wandering += dt * 2;
-      if (_wandering > _maxWandering) {
-        _wandering -= _maxWandering;
-      }
-    }
-
-    // but we apply it only when in waiting state:
-    if (_state == MiniEnemyState.waiting) {
-      position.x = _basePos.x + sin(_wandering) * 8;
-    }
-  }
-
-  double _wandering = 0;
-  static const _maxWandering = pi * 2;
-
-  double life = 3;
-
-  @override
-  bool applyDamage({double? laser, double? missile}) {
-    life -= (laser ?? 0) + (missile ?? 0);
-    if (life <= 0) {
-      spawnEffect(MiniEffectKind.explosion, position);
-      if (random.nextInt(3) == 0) {
-        spawnItem(position);
-      }
-      removeFromParent();
-      soundboard.play(MiniSound.death);
-      state.score += kind.life * 10;
-      onDefeated();
-      return true;
-    } else {
-      soundboard.play(MiniSound.hit);
-      state.score++;
-      return false;
-    }
-  }
-
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
-    if (other case Defender it) {
-      it.onHit(kind == MiniEnemyKind.smiley ? 2 : 1);
-      applyDamage(laser: life);
-    }
-  }
 }
