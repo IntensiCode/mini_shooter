@@ -22,6 +22,11 @@ import 'mini_state.dart';
 
 final formations = <List<(double, MiniEnemyKind, List<int>)>>[
   [
+    (0.0, MiniEnemyKind.smiley, [-2, -1, 0, 1, 2]),
+    (0.5, MiniEnemyKind.looker, [2, 1, 0, -1, -2]),
+    (0.5, MiniEnemyKind.bonny, [-2, -1, 0, 1, 2]),
+  ],
+  [
     (0.0, MiniEnemyKind.smiley, [-3, -2, -1, 0, 1, 2, 3]),
     (0.5, MiniEnemyKind.looker, [3, 2, 1, 0, -1, -2, -3]),
     (0.5, MiniEnemyKind.bonny, [-3, -2, -1, 0, 1, 2, 3]),
