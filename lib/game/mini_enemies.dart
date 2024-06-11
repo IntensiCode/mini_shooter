@@ -172,6 +172,8 @@ class MiniEnemy extends PositionComponent
     _state = MiniEnemyState.launching;
     _launching = 0;
     _launchDir = random.nextBool() ? 1 : -1;
+    if (position.x < gameWidth / 4) _launchDir = -1;
+    if (position.x > gameWidth * 3 / 4) _launchDir = 1;
     _launched.setFrom(position);
     soundboard.play(MiniSound.launch);
   }
