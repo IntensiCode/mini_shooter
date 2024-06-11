@@ -84,6 +84,7 @@ class MiniEnemies extends MiniScriptComponent {
 
   void _onDefeated() {
     logInfo('enemy defeated ${children.length}');
+    logInfo('enemy defeated ${children.map((it) => (it as MiniEnemy)._state)}');
     if (children.length <= 1) sendMessage(EnemiesDefeated());
   }
 

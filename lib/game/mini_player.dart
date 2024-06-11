@@ -40,6 +40,7 @@ class MiniPlayer extends PositionComponent
   var _state = _PlayerState.incoming;
 
   void vanish() {
+    logInfo('vanish');
     _state = _PlayerState.vanishing;
     clearScript();
     at(0.0, () => removeAll(children - ship));
