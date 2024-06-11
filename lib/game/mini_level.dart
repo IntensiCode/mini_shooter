@@ -16,6 +16,7 @@ import 'mini_effects.dart';
 import 'mini_enemies.dart';
 import 'mini_extras.dart';
 import 'mini_hud.dart';
+import 'mini_level_loader.dart';
 import 'mini_player.dart';
 import 'mini_state.dart';
 
@@ -45,8 +46,10 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     backgroundMoons();
     backgroundAsteroids().maxAsteroids = 0;
 
-    _enemies = MiniEnemies(level: level);
-    await _enemies.preloadLevelWrapped();
+    final loader = MiniLevelLoader(level: level);
+    await loader.loadLevelData();
+
+    _enemies = MiniEnemies(level: level, formation: loader.makeFormation());
 
     _items = items();
     _balls = balls(level);

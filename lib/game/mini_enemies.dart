@@ -5,7 +5,6 @@ import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame_tiled/flame_tiled.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
@@ -16,16 +15,17 @@ import '../util/auto_dispose.dart';
 import '../util/debug.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
-import '../util/tiled_extensions.dart';
 import 'mini_balls.dart';
 import 'mini_effects.dart';
 import 'mini_extras.dart';
 import 'mini_state.dart';
 
 class MiniEnemies extends MiniScriptComponent {
-  MiniEnemies({required this.level});
+  MiniEnemies({required this.level, required this.formation});
 
   final int level;
+
+  final Iterable<MiniEnemy> formation;
 
   bool get hasActiveEnemies => _active && _attackers.isNotEmpty;
 
@@ -35,48 +35,12 @@ class MiniEnemies extends MiniScriptComponent {
 
   bool _isWaiting(MiniEnemy it) => it._state == MiniEnemyState.waiting;
 
-  Future<bool> preloadLevelWrapped() async {
-    final wrap = _wrapAt;
-    if (wrap != null) {
-      final actual = ((level - 1) % wrap) + 1;
-      logInfo('preload level $actual instead of $level with wrap $wrap');
-      map = await TiledComponent.load('level$actual.tmx', Vector2(16.0, 16.0));
-      return true;
-    }
-    try {
-      map = await TiledComponent.load('level$level.tmx', Vector2(16.0, 16.0));
-      return true;
-    } catch (e, t) {
-      logError('failed to load level $level: $e', t);
-      _wrapAt = level - 1;
-      return await preloadLevelWrapped();
-    }
-  }
-
-  static int? _wrapAt;
-  late TiledComponent map;
-
   @override
   void onLoad() async {
     logInfo('load level $level');
-
-    final layer = map.getLayer('Attackers') as ObjectGroup;
-    final attackers = layer.objects;
-
-    const tileSetWidth = 11;
-    final lookup = <int, MiniEnemyKind>{
-      2: MiniEnemyKind.bonny,
-      3: MiniEnemyKind.looker,
-      4: MiniEnemyKind.smiley,
-    };
-    for (final it in attackers) {
-      final xy = Vector2(it.x, it.y + 16);
-      final tile = it.gid;
-      if (tile == null) continue;
-      final kindId = (tile - 1) ~/ tileSetWidth;
-      final kind = lookup[kindId];
-      if (kind == null) continue;
-      at(0.1, () => add(MiniEnemy(kind, level, _onDefeated)..position.setFrom(xy)));
+    for (final it in formation) {
+      it.onDefeated = _onDefeated;
+      at(0.1, () => add(it));
     }
     at(0.5, () => messaging.send(FormationComplete()));
     at(0.5, () => reactivate());
@@ -222,11 +186,14 @@ enum MiniEnemyState {
 class MiniEnemy extends PositionComponent
     with AutoDispose, MiniScriptFunctions, MiniScript, MiniTarget, CollisionCallbacks {
   //
-  MiniEnemy(this.kind, this.level, this.onDefeated);
+  MiniEnemy(this.kind, this.level, Vector2 position) {
+    this.position.setFrom(position);
+  }
 
   final MiniEnemyKind kind;
   final int level;
-  final void Function() onDefeated;
+
+  late final void Function() onDefeated;
 
   MiniEnemyState _state = MiniEnemyState.incoming;
 
