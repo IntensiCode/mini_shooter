@@ -45,6 +45,9 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     backgroundMoons();
     backgroundAsteroids().maxAsteroids = 0;
 
+    _enemies = MiniEnemies(level: level);
+    await _enemies.preloadLevelWrapped();
+
     _items = items();
     _balls = balls(level);
     effects();
@@ -53,7 +56,7 @@ class MiniLevel extends MiniScriptComponent with KeyboardHandler, MiniGameKeys, 
     at(0.1, () async => fadeIn(textXY('Level $level', xCenter, yCenter)));
     at(1.0, () async => fadeIn(textXY('Game on!', xCenter, yCenter + lineHeight)));
     at(2.0, () async => fadeOutByType<BitmapText>());
-    at(0.0, () async => add(_enemies = MiniEnemies(level: level)));
+    at(0.0, () async => add(_enemies));
 
     onMessage<FormationComplete>((_) {
       _state = MiniLevelState.playing;

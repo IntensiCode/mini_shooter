@@ -42,6 +42,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/images/fonts/
+    - assets/tiles/
   shaders:
     - assets/shaders/asteroid.frag
   uses-material-design: true

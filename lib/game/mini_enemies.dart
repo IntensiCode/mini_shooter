@@ -5,6 +5,7 @@ import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
@@ -15,29 +16,11 @@ import '../util/auto_dispose.dart';
 import '../util/debug.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
+import '../util/tiled_extensions.dart';
 import 'mini_balls.dart';
 import 'mini_effects.dart';
 import 'mini_extras.dart';
 import 'mini_state.dart';
-
-final formations = <List<(double, MiniEnemyKind, List<int>)>>[
-  [
-    (0.0, MiniEnemyKind.smiley, [-2, -1, 0, 1, 2]),
-    (0.5, MiniEnemyKind.looker, [2, 1, 0, -1, -2]),
-    (0.5, MiniEnemyKind.bonny, [-2, -1, 0, 1, 2]),
-  ],
-  [
-    (0.0, MiniEnemyKind.smiley, [-3, -2, -1, 0, 1, 2, 3]),
-    (0.5, MiniEnemyKind.looker, [3, 2, 1, 0, -1, -2, -3]),
-    (0.5, MiniEnemyKind.bonny, [-3, -2, -1, 0, 1, 2, 3]),
-  ],
-  [
-    (0.0, MiniEnemyKind.smiley, [0, -1, 1, -2, 2, -3, 3]),
-    (0.5, MiniEnemyKind.looker, [0, -1, 1, -2, 2, -3, 3]),
-    (0.5, MiniEnemyKind.bonny, [0, -1, 1, -2, 2, -3, 3]),
-    (0.5, MiniEnemyKind.bonny, [0, -1, 1, -3, 3]),
-  ],
-];
 
 class MiniEnemies extends MiniScriptComponent {
   MiniEnemies({required this.level});
@@ -52,18 +35,48 @@ class MiniEnemies extends MiniScriptComponent {
 
   bool _isWaiting(MiniEnemy it) => it._state == MiniEnemyState.waiting;
 
+  Future<bool> preloadLevelWrapped() async {
+    final wrap = _wrapAt;
+    if (wrap != null) {
+      final actual = ((level - 1) % wrap) + 1;
+      logInfo('preload level $actual instead of $level with wrap $wrap');
+      map = await TiledComponent.load('level$actual.tmx', Vector2(16.0, 16.0));
+      return true;
+    }
+    try {
+      map = await TiledComponent.load('level$level.tmx', Vector2(16.0, 16.0));
+      return true;
+    } catch (e, t) {
+      logError('failed to load level $level: $e', t);
+      _wrapAt = level - 1;
+      return await preloadLevelWrapped();
+    }
+  }
+
+  static int? _wrapAt;
+  late TiledComponent map;
+
   @override
-  void onLoad() {
+  void onLoad() async {
     logInfo('load level $level');
 
-    final formation = formations[(level - 1) % formations.length];
-    for (final (line, data) in formation.indexed) {
-      final delay = data.$1;
-      at(delay, () => soundboard.play(MiniSound.strangeness));
-      for (final pos in data.$3) {
-        final xy = Vector2(xCenter + pos * 24, 32 + line * 24);
-        at(0.1, () => add(MiniEnemy(data.$2, level, _onDefeated)..position.setFrom(xy)));
-      }
+    final layer = map.getLayer('Attackers') as ObjectGroup;
+    final attackers = layer.objects;
+
+    const tileSetWidth = 11;
+    final lookup = <int, MiniEnemyKind>{
+      2: MiniEnemyKind.bonny,
+      3: MiniEnemyKind.looker,
+      4: MiniEnemyKind.smiley,
+    };
+    for (final it in attackers) {
+      final xy = Vector2(it.x, it.y + 16);
+      final tile = it.gid;
+      if (tile == null) continue;
+      final kindId = (tile - 1) ~/ tileSetWidth;
+      final kind = lookup[kindId];
+      if (kind == null) continue;
+      at(0.1, () => add(MiniEnemy(kind, level, _onDefeated)..position.setFrom(xy)));
     }
     at(0.5, () => messaging.send(FormationComplete()));
     at(0.5, () => reactivate());
