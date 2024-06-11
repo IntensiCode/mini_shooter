@@ -100,3 +100,11 @@ extension FragmentShaderExtensions on FragmentShader {
     setFloat(index + 3, color.opacity);
   }
 }
+
+extension IntExtensions on int {
+  forEach(void Function(int) f) {
+    for (var i = 0; i < this; i++) {
+      f(i);
+    }
+  }
+}

@@ -101,6 +101,8 @@ mixin Defender {
 
 sealed class MiniMessage {}
 
+class ChallengeComplete extends MiniMessage {}
+
 class EnemiesDefeated extends MiniMessage {}
 
 class FormationComplete extends MiniMessage {}

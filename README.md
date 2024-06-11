@@ -20,7 +20,7 @@ next few days:
 * [X] have single enemies attack galaga style
 * [X] have combined enemy attacks galaga style
 * [X] use tiled for the levels
-* [ ] challenging stage every five levels
+* [X] challenging stage every five levels
 * [ ] space worm for challenging stage
 * [X] collide player with attacking enemies
 * [X] missiles! :-D
