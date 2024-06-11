@@ -181,7 +181,7 @@ class MiniEnemies extends MiniScriptComponent {
 
   double _attackerCoolDown() => (8 - level / 4).clamp(2, 8);
 
-  double _formationCoolDown() => (12 - level / 6).clamp(2, 12);
+  double _formationCoolDown() => (19 - level / 6).clamp(2, 19);
 
   int get _maxAttackers => (level / 3).clamp(1, 4).toInt();
 }
