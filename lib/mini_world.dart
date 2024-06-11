@@ -21,6 +21,7 @@ class MiniWorld extends World {
     logInfo(it);
     switch (it) {
       case Screen.game:
+        level = 1;
         showGame();
       case Screen.splash:
         showSplash();
