@@ -28,6 +28,7 @@ next few days:
 * [X] missiles! :-D
 * [X] help on title (space, [C], secondary for missile, long secondary for non-homing, keys)
 * [X] extra life
+* [X] fix end of level logic when being killed by killing last enemy
 
 No promises!
 
