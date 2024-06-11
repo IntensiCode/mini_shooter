@@ -1,4 +1,4 @@
-import 'package:dart_minilog/dart_minilog.dart';
+
 
 class InputAcceleration {
   InputAcceleration({
@@ -6,8 +6,8 @@ class InputAcceleration {
     required bool Function() goPositive,
     this.position = 0,
     this.velocity = 0,
-    double velocityMax = 250,
-    double acceleration = 250,
+    double velocityMax = 500,
+    double acceleration = 500,
     double positionLimit = 160,
     double positionSoftBound = 32,
     double positionHardBound = 12,
