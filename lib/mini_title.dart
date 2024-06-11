@@ -45,14 +45,14 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
 
     loopAt(0.0, () {
       Component? showing;
+      at(1.0, () => add(showing = fadeIn(Controls())));
+      at(10.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Entities())));
       at(8.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Projectiles())));
       at(8.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Items())));
       at(12.0, () => showing?.fadeOutDeep(andRemove: true));
-      at(1.0, () => add(showing = fadeIn(Controls())));
-      at(10.0, () => showing?.fadeOutDeep(andRemove: true));
     });
   }
 }
@@ -127,6 +127,7 @@ class Controls extends InfoScreen {
   @override
   onLoad() async {
     super.onLoad();
+    _addPos.y -= lineHeight;
     addText('Move your ship:');
     addText('Cursor Left/Right or a/d');
     addText('');
@@ -135,5 +136,8 @@ class Controls extends InfoScreen {
     addText('');
     addText('Fire missile:');
     addText('Shift or k');
+    addText('');
+    addText('Toggle mute: m');
+    addText('Back to title: t');
   }
 }

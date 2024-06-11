@@ -75,6 +75,9 @@ class MiniShooter extends FlameGame<MiniWorld>
 
     _showInitialScreen();
 
+    onKey('m', () => soundboard.toggleMute());
+    onKey('t', () => showScreen(Screen.title));
+
     if (dev) {
       onKey('<C-d>', () => _toggleDebug());
       onKey('<C-m>', () => soundboard.toggleMute());
