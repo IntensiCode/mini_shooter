@@ -4,7 +4,7 @@ import '../core/mini_common.dart';
 import '../scripting/mini_script_functions.dart';
 import '../util/auto_dispose.dart';
 import 'mini_enemy_kind.dart';
-import 'mini_extras.dart';
+import 'mini_extra_items.dart';
 import 'mini_make_enemy.dart';
 import 'mini_path.dart';
 import 'mini_target.dart';

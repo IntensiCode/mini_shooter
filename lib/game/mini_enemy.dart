@@ -13,7 +13,7 @@ import '../util/extensions.dart';
 import '../util/random.dart';
 import 'mini_enemy_kind.dart';
 import 'mini_enemy_state.dart';
-import 'mini_extras.dart';
+import 'mini_extra_items.dart';
 import 'mini_make_enemy.dart';
 import 'mini_state.dart';
 import 'mini_target.dart';

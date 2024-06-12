@@ -11,14 +11,14 @@ import '../util/random.dart';
 import 'mini_effects.dart';
 
 extension ScriptFunctionsExtension on MiniScriptFunctions {
-  MiniItems items() => added(MiniItems());
+  MiniExtraItems items() => added(MiniExtraItems());
 }
 
 extension ComponentExtensions on Component {
   void spawnItem(Vector2 position, [Set<MiniItemKind>? which]) => messaging.send(SpawnItem(position, which));
 }
 
-class MiniItems extends MiniScriptComponent {
+class MiniExtraItems extends MiniScriptComponent {
   bool get hasActiveItems => children.isNotEmpty;
 
   @override

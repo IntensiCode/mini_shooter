@@ -5,7 +5,7 @@ import '../scripting/mini_script.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
 import 'mini_effects.dart';
-import 'mini_extras.dart';
+import 'mini_extra_items.dart';
 import 'mini_wave.dart';
 
 class MiniChallengers extends MiniScriptComponent {

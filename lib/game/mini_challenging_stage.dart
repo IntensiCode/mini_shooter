@@ -11,7 +11,7 @@ import '../scripting/mini_script.dart';
 import '../util/extensions.dart';
 import 'mini_challengers.dart';
 import 'mini_effects.dart';
-import 'mini_extras.dart';
+import 'mini_extra_items.dart';
 import 'mini_player.dart';
 import 'mini_wave.dart';
 
@@ -28,7 +28,7 @@ class MiniChallengingStage extends MiniScriptComponent with KeyboardHandler, Min
 
   final int level;
   late final MiniChallengers _challengers;
-  late final MiniItems _items;
+  late final MiniExtraItems _items;
   late final MiniPlayer _player;
 
   _State _state = _State.playing;

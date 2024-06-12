@@ -15,7 +15,7 @@ import 'mini_balls.dart';
 import 'mini_effects.dart';
 import 'mini_enemies.dart';
 import 'mini_enemy.dart';
-import 'mini_extras.dart';
+import 'mini_extra_items.dart';
 import 'mini_hud.dart';
 import 'mini_player.dart';
 import 'mini_state.dart';
@@ -91,7 +91,7 @@ class MiniFormationStage extends MiniScriptComponent with KeyboardHandler, MiniG
     });
   }
 
-  late MiniItems _items;
+  late MiniExtraItems _items;
   late MiniBalls _balls;
   late MiniEnemies _enemies;
   late MiniPlayer _player;
