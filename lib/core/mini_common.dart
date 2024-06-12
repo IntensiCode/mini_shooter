@@ -83,6 +83,7 @@ enum MiniItemKind {
   score1(3),
   score2(4),
   score3(5),
+  extraLife(6),
   ;
 
   final int column;

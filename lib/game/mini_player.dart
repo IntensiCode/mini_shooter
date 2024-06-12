@@ -143,6 +143,9 @@ class MiniPlayer extends PositionComponent
       case MiniItemKind.score3:
         state.score += 50;
         break;
+      case MiniItemKind.extraLife:
+        state.lives++;
+        break;
     }
   }
 
