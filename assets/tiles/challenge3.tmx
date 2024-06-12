@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="170">
+ <tileset firstgid="1" source="mini_shooter.tsx"/>
+ <objectgroup id="3" name="Challenge">
+  <object id="160" gid="48" x="8" y="-8" width="16" height="16"/>
+  <object id="161" gid="48" x="232" y="-8" width="16" height="16"/>
+  <object id="162" gid="26" x="64" y="-8" width="16" height="16">
+   <properties>
+    <property name="SpawnAt" type="float" value="12"/>
+   </properties>
+  </object>
+  <object id="164" x="240" y="-16">
+   <polyline points="-112,0 -112,80 -136,104 -200,104 -224,80 -224,0"/>
+  </object>
+  <object id="165" x="240" y="-16">
+   <polyline points="0,0 0,80 -24,104 -88,104 -112,80 -112,0"/>
+  </object>
+  <object id="167" gid="26" x="176" y="-8" width="16" height="16">
+   <properties>
+    <property name="SpawnAt" type="float" value="12"/>
+   </properties>
+  </object>
+  <object id="168" x="72" y="-16">
+   <polyline points="0,0 0,56 24,80 192,80"/>
+  </object>
+  <object id="169" x="184" y="-16">
+   <polyline points="0,0 0,56 -24,80 -192,80"/>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="80">
+ <tileset firstgid="1" source="mini_shooter.tsx"/>
+ <objectgroup id="3" name="Attackers">
+  <object id="58" gid="48" x="16" y="16" width="16" height="16"/>
+  <object id="59" gid="48" x="40" y="16" width="16" height="16"/>
+  <object id="60" gid="48" x="224" y="16" width="16" height="16"/>
+  <object id="61" gid="48" x="200" y="16" width="16" height="16"/>
+  <object id="62" gid="37" x="8" y="32" width="16" height="16"/>
+  <object id="63" gid="37" x="32" y="32" width="16" height="16"/>
+  <object id="64" gid="37" x="56" y="32" width="16" height="16"/>
+  <object id="65" gid="37" x="232" y="32" width="16" height="16"/>
+  <object id="66" gid="37" x="208" y="32" width="16" height="16"/>
+  <object id="67" gid="37" x="184" y="32" width="16" height="16"/>
+  <object id="68" gid="37" x="16" y="48" width="16" height="16"/>
+  <object id="69" gid="37" x="40" y="48" width="16" height="16"/>
+  <object id="70" gid="37" x="224" y="48" width="16" height="16"/>
+  <object id="71" gid="37" x="200" y="48" width="16" height="16"/>
+  <object id="72" gid="26" x="64" y="64" width="16" height="16"/>
+  <object id="73" gid="26" x="72" y="48" width="16" height="16"/>
+  <object id="74" gid="26" x="80" y="32" width="16" height="16"/>
+  <object id="75" gid="26" x="88" y="16" width="16" height="16"/>
+  <object id="76" gid="26" x="176" y="64" width="16" height="16"/>
+  <object id="77" gid="26" x="168" y="48" width="16" height="16"/>
+  <object id="78" gid="26" x="160" y="32" width="16" height="16"/>
+  <object id="79" gid="26" x="152" y="16" width="16" height="16"/>
+ </objectgroup>
+</map>

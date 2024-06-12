@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="7" nextobjectid="157">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="86">
  <tileset firstgid="1" source="mini_shooter.tsx"/>
- <objectgroup id="3" name="Challengers">
-  <object id="143" gid="26" x="-32" y="104" width="16" height="16">
-   <properties>
-    <property name="SpawnAt" type="float" value="0"/>
-   </properties>
-  </object>
-  <object id="146" gid="26" x="272" y="24" width="16" height="16">
-   <properties>
-    <property name="SpawnAt" type="float" value="10"/>
-   </properties>
-  </object>
- </objectgroup>
- <objectgroup id="6" name="Paths" visible="0">
-  <object id="155" x="-24" y="96">
-   <polyline points="0,0 192,0 216,-24 216,-56 192,-80 112,-80 88,-56 88,-24 112,0 304,0"/>
-  </object>
-  <object id="156" x="-24" y="16">
-   <polyline points="0,0 192,0 216,24 216,56 192,80 112,80 88,56 88,24 112,0 304,0"/>
-  </object>
+ <objectgroup id="3" name="Attackers">
+  <object id="58" gid="37" x="16" y="24" width="16" height="16"/>
+  <object id="59" gid="48" x="40" y="24" width="16" height="16"/>
+  <object id="60" gid="37" x="64" y="24" width="16" height="16"/>
+  <object id="61" gid="26" x="16" y="48" width="16" height="16"/>
+  <object id="62" gid="37" x="40" y="48" width="16" height="16"/>
+  <object id="63" gid="26" x="64" y="48" width="16" height="16"/>
+  <object id="64" gid="37" x="224" y="24" width="16" height="16"/>
+  <object id="65" gid="48" x="200" y="24" width="16" height="16"/>
+  <object id="66" gid="37" x="176" y="24" width="16" height="16"/>
+  <object id="67" gid="26" x="224" y="48" width="16" height="16"/>
+  <object id="68" gid="37" x="200" y="48" width="16" height="16"/>
+  <object id="69" gid="26" x="176" y="48" width="16" height="16"/>
+  <object id="71" gid="37" x="96" y="32" width="16" height="16"/>
+  <object id="72" gid="37" x="120" y="32" width="16" height="16"/>
+  <object id="73" gid="37" x="144" y="32" width="16" height="16"/>
+  <object id="74" gid="37" x="144" y="48" width="16" height="16"/>
+  <object id="75" gid="37" x="120" y="48" width="16" height="16"/>
+  <object id="76" gid="37" x="96" y="48" width="16" height="16"/>
+  <object id="77" gid="37" x="96" y="64" width="16" height="16"/>
+  <object id="78" gid="37" x="120" y="64" width="16" height="16"/>
+  <object id="79" gid="37" x="144" y="64" width="16" height="16"/>
+  <object id="80" gid="26" x="64" y="72" width="16" height="16"/>
+  <object id="81" gid="26" x="40" y="72" width="16" height="16"/>
+  <object id="82" gid="26" x="16" y="72" width="16" height="16"/>
+  <object id="83" gid="26" x="176" y="72" width="16" height="16"/>
+  <object id="84" gid="26" x="200" y="72" width="16" height="16"/>
+  <object id="85" gid="26" x="224" y="72" width="16" height="16"/>
  </objectgroup>
 </map>

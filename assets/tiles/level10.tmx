@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="166">
+ <tileset firstgid="1" source="mini_shooter.tsx"/>
+ <objectgroup id="3" name="Attackers">
+  <object id="139" gid="48" x="32" y="88" width="16" height="16"/>
+  <object id="140" gid="37" x="8" y="88" width="16" height="16"/>
+  <object id="141" gid="37" x="56" y="88" width="16" height="16"/>
+  <object id="142" gid="48" x="208" y="88" width="16" height="16"/>
+  <object id="143" gid="37" x="232" y="88" width="16" height="16"/>
+  <object id="144" gid="37" x="184" y="88" width="16" height="16"/>
+  <object id="145" gid="48" x="48" y="56" width="16" height="16"/>
+  <object id="146" gid="37" x="24" y="56" width="16" height="16"/>
+  <object id="147" gid="37" x="72" y="56" width="16" height="16"/>
+  <object id="148" gid="48" x="192" y="56" width="16" height="16"/>
+  <object id="149" gid="37" x="216" y="56" width="16" height="16"/>
+  <object id="150" gid="37" x="168" y="56" width="16" height="16"/>
+  <object id="151" gid="48" x="64" y="24" width="16" height="16"/>
+  <object id="152" gid="37" x="88" y="24" width="16" height="16"/>
+  <object id="153" gid="37" x="40" y="24" width="16" height="16"/>
+  <object id="154" gid="48" x="184" y="24" width="16" height="16"/>
+  <object id="155" gid="37" x="208" y="24" width="16" height="16"/>
+  <object id="156" gid="37" x="160" y="24" width="16" height="16"/>
+  <object id="157" gid="26" x="120" y="24" width="16" height="16"/>
+  <object id="158" gid="26" x="104" y="40" width="16" height="16"/>
+  <object id="159" gid="26" x="136" y="40" width="16" height="16"/>
+  <object id="160" gid="26" x="120" y="56" width="16" height="16"/>
+  <object id="161" gid="26" x="104" y="72" width="16" height="16"/>
+  <object id="162" gid="26" x="136" y="72" width="16" height="16"/>
+  <object id="163" gid="26" x="120" y="88" width="16" height="16"/>
+  <object id="164" gid="26" x="88" y="88" width="16" height="16"/>
+  <object id="165" gid="26" x="152" y="88" width="16" height="16"/>
+ </objectgroup>
+</map>

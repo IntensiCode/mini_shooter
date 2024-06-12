@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="14" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="237">
+ <tileset firstgid="1" source="mini_shooter.tsx"/>
+ <objectgroup id="3" name="Attackers">
+  <object id="196" gid="37" x="8" y="16" width="16" height="16"/>
+  <object id="197" gid="37" x="16" y="32" width="16" height="16"/>
+  <object id="198" gid="37" x="24" y="48" width="16" height="16"/>
+  <object id="199" gid="37" x="32" y="64" width="16" height="16"/>
+  <object id="200" gid="37" x="40" y="80" width="16" height="16"/>
+  <object id="201" gid="37" x="48" y="96" width="16" height="16"/>
+  <object id="202" gid="37" x="56" y="112" width="16" height="16"/>
+  <object id="203" gid="37" x="232" y="16" width="16" height="16"/>
+  <object id="204" gid="37" x="224" y="32" width="16" height="16"/>
+  <object id="205" gid="37" x="216" y="48" width="16" height="16"/>
+  <object id="206" gid="37" x="208" y="64" width="16" height="16"/>
+  <object id="208" gid="37" x="200" y="80" width="16" height="16"/>
+  <object id="210" gid="37" x="192" y="96" width="16" height="16"/>
+  <object id="211" gid="37" x="184" y="112" width="16" height="16"/>
+  <object id="216" gid="26" x="56" y="16" width="16" height="16"/>
+  <object id="217" gid="26" x="64" y="32" width="16" height="16"/>
+  <object id="218" gid="26" x="72" y="48" width="16" height="16"/>
+  <object id="219" gid="26" x="80" y="64" width="16" height="16"/>
+  <object id="220" gid="26" x="88" y="80" width="16" height="16"/>
+  <object id="221" gid="26" x="96" y="96" width="16" height="16"/>
+  <object id="222" gid="26" x="104" y="112" width="16" height="16"/>
+  <object id="223" gid="26" x="184" y="16" width="16" height="16"/>
+  <object id="224" gid="26" x="176" y="32" width="16" height="16"/>
+  <object id="225" gid="26" x="168" y="48" width="16" height="16"/>
+  <object id="226" gid="26" x="160" y="64" width="16" height="16"/>
+  <object id="227" gid="26" x="152" y="80" width="16" height="16"/>
+  <object id="228" gid="26" x="144" y="96" width="16" height="16"/>
+  <object id="229" gid="26" x="136" y="112" width="16" height="16"/>
+  <object id="230" gid="48" x="120" y="16" width="16" height="16"/>
+  <object id="231" gid="48" x="120" y="48" width="16" height="16"/>
+  <object id="232" gid="48" x="120" y="80" width="16" height="16"/>
+  <object id="233" gid="37" x="104" y="32" width="16" height="16"/>
+  <object id="234" gid="37" x="136" y="32" width="16" height="16"/>
+  <object id="235" gid="37" x="104" y="64" width="16" height="16"/>
+  <object id="236" gid="37" x="136" y="64" width="16" height="16"/>
+ </objectgroup>
+</map>
