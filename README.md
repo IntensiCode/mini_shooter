@@ -34,6 +34,7 @@ Most probably not:
 * [ ] maybe have double player after freeing caught player
 * [ ] maybe add space invaders ufo
 * [ ] maybe add special bigger enemy for the combined attack
+* [X] interpolate challenge paths
 
 No promises!
 

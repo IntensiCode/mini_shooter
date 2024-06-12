@@ -43,7 +43,7 @@ class MiniChallenger extends PositionComponent with AutoDispose, MiniScriptFunct
     pathTime += dt;
     path.at(pathTime * speed, position);
 
-    if (path.isAtEnd(position)) {
+    if (path.isAtEnd(pathTime * speed)) {
       removeFromParent();
       isDone = true;
     }

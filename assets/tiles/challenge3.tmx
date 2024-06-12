@@ -21,10 +21,10 @@
    </properties>
   </object>
   <object id="168" x="72" y="-16">
-   <polyline points="0,0 0,56 24,80 192,80"/>
+   <polyline points="0,0 0,56 24,80 66,80 108,80 150,80 192,80"/>
   </object>
   <object id="169" x="184" y="-16">
-   <polyline points="0,0 0,56 -24,80 -192,80"/>
+   <polyline points="0,0 0,56 -24,80 -66,80 -108,80 -150,80 -192,80"/>
   </object>
  </objectgroup>
 </map>
