@@ -44,7 +44,7 @@ class MiniSoundboard {
 
   preload() async {
     for (final it in MiniSound.values) {
-      logInfo('cache $it');
+      logVerbose('cache $it');
       await FlameAudio.audioCache.load('effect/${it.name}.ogg');
     }
   }
@@ -73,7 +73,7 @@ class MiniSoundboard {
 
     if (reuse == -1) {
       while (_pooledPlayers.length >= _maxPooled) {
-        logInfo('disposing pooled player');
+        logVerbose('disposing pooled player');
         final (_, player) = _pooledPlayers.removeAt(0);
         player.dispose();
       }
@@ -91,7 +91,7 @@ class MiniSoundboard {
 
       _activeSounds++;
       _pooledPlayers.add((sound, it));
-      logInfo('pooled: ${_pooledPlayers.length}');
+      logVerbose('pooled: ${_pooledPlayers.length}');
     } else {
       final it = _pooledPlayers.removeAt(reuse);
       _pooledPlayers.add(it);

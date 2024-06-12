@@ -28,7 +28,7 @@ mixin MiniShortcuts<T extends World> on HasKeyboardHandlerComponents<T> {
   final handlers = <(String, void Function())>[];
 
   Disposable onKey(String pattern, void Function() callback) {
-    logInfo('onKey $pattern');
+    logVerbose('onKey $pattern');
     final handler = (pattern, callback);
     handlers.add(handler);
     return Disposable.wrap(() => handlers.remove(handler));

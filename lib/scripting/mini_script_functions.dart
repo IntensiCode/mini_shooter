@@ -39,7 +39,7 @@ mixin MiniScriptFunctions on Component, AutoDispose {
       effect(
         () => callback(),
         debugLabel: hint,
-        onDispose: () => logInfo('effect disposed: $hint'),
+        onDispose: () => logVerbose('effect disposed: $hint'),
       ),
     );
     _autoDisposeCount++;

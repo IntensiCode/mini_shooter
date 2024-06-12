@@ -68,7 +68,7 @@ mixin AutoDispose {
   /// Dispose all [Disposable]s currently registered with this [AutoDispose] instance.
   void disposeAll() {
     if (_disposables.isNotEmpty) {
-      logInfo('disposing ${_disposables.keys}');
+      logVerbose('disposing ${_disposables.keys}');
     }
     for (var it in _disposables.values) {
       it.dispose();
@@ -80,7 +80,7 @@ mixin AutoDispose {
   /// tag.
   void dispose(String tag) {
     final disposable = _disposables.remove(tag);
-    if (disposable != null) logInfo('disposing $tag');
+    if (disposable != null) logVerbose('disposing $tag');
     disposable?.dispose();
   }
 
