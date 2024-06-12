@@ -77,18 +77,19 @@ enum MiniEffectKind {
 }
 
 enum MiniItemKind {
-  laserCharge(0),
-  shield(1),
-  missile(2),
-  score1(3),
-  score2(4),
-  score3(5),
-  extraLife(6),
+  laserCharge(0, 1),
+  shield(1, 1),
+  missile(2, 1),
+  score1(3, 1),
+  score2(4, 0.8),
+  score3(5, 0.5),
+  extraLife(6, 0.01),
   ;
 
   final int column;
+  final double probability;
 
-  const MiniItemKind(this.column);
+  const MiniItemKind(this.column, this.probability);
 }
 
 mixin Collector {

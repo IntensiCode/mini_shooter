@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
@@ -27,7 +26,14 @@ class MiniItems extends MiniScriptComponent {
     super.onMount();
     onMessage<SpawnItem>((it) {
       final which = it.kind?.toList() ?? MiniItemKind.values;
-      _spawn(it.position, which.random(random));
+      final dist = which.fold(<(double, MiniItemKind)>[], (acc, kind) {
+        acc.add(((acc.lastOrNull?.$1 ?? 0) + kind.probability, kind));
+        return acc;
+      });
+      final pick = random.nextDoubleLimit(dist.last.$1);
+      dist.removeWhere((it) => it.$1 <= pick);
+      final picked = dist.firstOrNull;
+      if (picked != null) _spawn(it.position, picked.$2);
     });
   }
 
