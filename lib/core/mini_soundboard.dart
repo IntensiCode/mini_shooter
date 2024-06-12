@@ -7,6 +7,7 @@ import 'mini_common.dart';
 enum MiniSound {
   asteroid_clash,
   block,
+  challenge,
   death,
   drop,
   explosion,

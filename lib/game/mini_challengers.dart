@@ -1,6 +1,7 @@
 import 'package:dart_minilog/dart_minilog.dart';
 
 import '../core/mini_common.dart';
+import '../core/mini_soundboard.dart';
 import '../scripting/mini_script.dart';
 import '../util/extensions.dart';
 import '../util/random.dart';
@@ -67,6 +68,7 @@ class MiniChallengers extends MiniScriptComponent {
       spawnEffect(MiniEffectKind.appear, pos, delaySeconds: delay, atHalfTime: () {
         context.spawnItem(pos, {MiniItemKind.score3});
       });
+      soundboard.play(MiniSound.challenge);
     });
   }
 }
