@@ -71,6 +71,12 @@ extension DynamicListExtensions on List<dynamic> {
 }
 
 extension ListExtensions<T> on List<T> {
+  void removeAll(Iterable<T> other) {
+    for (final it in other) {
+      remove(it);
+    }
+  }
+
   T? removeLastOrNull() {
     if (isEmpty) return null;
     return removeLast();
