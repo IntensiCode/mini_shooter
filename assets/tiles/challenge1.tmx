@@ -9,7 +9,7 @@
   </object>
   <object id="146" gid="26" x="272" y="24" width="16" height="16">
    <properties>
-    <property name="SpawnAt" type="float" value="15"/>
+    <property name="SpawnAt" type="float" value="12"/>
    </properties>
   </object>
   <object id="161" x="-24" y="96">
