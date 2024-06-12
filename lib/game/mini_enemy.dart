@@ -153,7 +153,7 @@ class MiniEnemy extends PositionComponent
       if (_launching.abs() >= pi) {
         _launching = pi * _launching.sign;
         _attackDx = position.x < gameWidth / 2 ? 1 : -1;
-        _attackDx *= 5 + random.nextDoubleLimit(5);
+        _attackDx *= ((5 + random.nextDoubleLimit(5)) * level * 0.25).clamp(5, 20);
         _state = MiniEnemyState.attacking;
 
         // to collide with player, we switch to active during the attack run:
