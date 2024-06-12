@@ -12,7 +12,8 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 }
 
 extension ComponentExtensions on Component {
-  void spawnEffect(MiniEffectKind kind, Vector2 position) => messaging.send(SpawnEffect(kind, position));
+  void spawnEffect(MiniEffectKind kind, Vector2 position, [Function()? atHalfTime]) =>
+      messaging.send(SpawnEffect(kind, position, atHalfTime));
 }
 
 class MiniEffects extends MiniScriptComponent {
@@ -39,6 +40,7 @@ class MiniEffects extends MiniScriptComponent {
       it.kind = data.kind;
       it.animation = animations[data.kind]!;
       it.position.setFrom(data.position);
+      it.atHalfTime = data.atHalfTime;
       add(it);
     });
   }
@@ -59,11 +61,20 @@ class MiniEffect extends SpriteAnimationComponent {
   final void Function(MiniEffect) _recycle;
 
   late MiniEffectKind kind;
+  Function()? atHalfTime;
 
   @override
   void onMount() {
     animationTicker!.reset();
     animationTicker!.onComplete = () => _recycle(this);
+    if (atHalfTime != null) {
+      animationTicker!.onFrame = (it) {
+        if (it >= animation!.frames.length ~/ 2) {
+          atHalfTime!();
+          animationTicker!.onFrame = null;
+        }
+      };
+    }
     if (kind == MiniEffectKind.explosion) soundboard.play(MiniSound.explosion);
   }
 }
