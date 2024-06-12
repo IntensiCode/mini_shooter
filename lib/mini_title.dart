@@ -47,7 +47,7 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
     loopAt(0.0, () {
       Component? showing;
       at(1.0, () => add(showing = fadeIn(Credits())));
-      at(15.0, () => showing?.fadeOutDeep(andRemove: true));
+      at(18.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Controls())));
       at(15.0, () => showing?.fadeOutDeep(andRemove: true));
       at(1.0, () => add(showing = fadeIn(Entities())));
@@ -151,9 +151,8 @@ class Credits extends InfoScreen {
     super.onLoad();
     _addPos.y -= lineHeight * 2;
     addText('Gfx By:');
-    addText('GrafxKid (itch.io)');
-    addText('&');
-    addText('The.French.DJ');
+    addText('GrafxKid @ itch.io,');
+    addText('Jotto & The.French.DJ');
     addText('');
     addText('Background music By:');
     addText('Suno.com');
