@@ -136,9 +136,8 @@ class SpawnEffect extends MiniMessage {
 }
 
 class SpawnItem extends MiniMessage {
-  SpawnItem(this.position, [this.speed, this.kind]);
+  SpawnItem(this.position, [this.kind]);
 
   final Vector2 position;
-  final double? speed;
   final Set<MiniItemKind>? kind;
 }
