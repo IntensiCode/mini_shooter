@@ -129,10 +129,11 @@ class SpawnBall extends MiniMessage {
 }
 
 class SpawnEffect extends MiniMessage {
-  SpawnEffect(this.kind, this.position, this.atHalfTime);
+  SpawnEffect(this.kind, this.position, this.delaySeconds, this.atHalfTime);
 
   final MiniEffectKind kind;
   final Vector2 position;
+  final double? delaySeconds;
   final Function()? atHalfTime;
 }
 

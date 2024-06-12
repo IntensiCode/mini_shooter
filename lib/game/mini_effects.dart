@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 
+import '../components/delayed.dart';
 import '../core/mini_common.dart';
 import '../core/mini_messaging.dart';
 import '../core/mini_soundboard.dart';
@@ -12,8 +13,8 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 }
 
 extension ComponentExtensions on Component {
-  void spawnEffect(MiniEffectKind kind, Vector2 position, [Function()? atHalfTime]) =>
-      messaging.send(SpawnEffect(kind, position, atHalfTime));
+  void spawnEffect(MiniEffectKind kind, Vector2 position, {double? delaySeconds, Function()? atHalfTime}) =>
+      messaging.send(SpawnEffect(kind, position, delaySeconds, atHalfTime));
 }
 
 class MiniEffects extends MiniScriptComponent {
@@ -41,7 +42,9 @@ class MiniEffects extends MiniScriptComponent {
       it.animation = animations[data.kind]!;
       it.position.setFrom(data.position);
       it.atHalfTime = data.atHalfTime;
-      add(it);
+
+      final delay = data.delaySeconds ?? 0.0;
+      add(delay == 0 ? it : Delayed(delay, it));
     });
   }
 
