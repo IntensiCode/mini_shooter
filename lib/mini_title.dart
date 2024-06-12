@@ -39,8 +39,9 @@ class MiniTitle extends MiniScriptComponent with HasAutoDisposeShortcuts {
 
     fontSelect(fancyFont, scale: fontScale * 4);
 
+    at(0.1, () async => fadeIn(await spriteXY('title.png', xCenter, yCenter, Anchor.center)));
     at(0.1, () async => fadeIn(await spriteXY('flame.png', xCenter, lineHeight, Anchor.topCenter)));
-    at(0.1, () async => fadeIn(textXY('Mini Shooter', xCenter, lineHeight * 3, anchor: Anchor.topCenter)));
+    at(0.1, () async => fadeIn(textXY('GALAXINA', xCenter, lineHeight * 3, anchor: Anchor.topCenter)));
     at(0.1, () => pressFireToStart());
 
     loopAt(0.0, () {
