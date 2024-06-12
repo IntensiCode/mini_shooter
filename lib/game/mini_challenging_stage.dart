@@ -12,6 +12,7 @@ import '../util/extensions.dart';
 import 'mini_challengers.dart';
 import 'mini_effects.dart';
 import 'mini_extra_items.dart';
+import 'mini_hud.dart';
 import 'mini_player.dart';
 import 'mini_wave.dart';
 
@@ -45,6 +46,7 @@ class MiniChallengingStage extends MiniScriptComponent with KeyboardHandler, Min
     _items = items();
 
     add(_player = MiniPlayer());
+    add(MiniHud());
     at(1.0, () => add(_challengers));
 
     onMessage<ChallengeComplete>((_) => _state = _State.waiting_to_complete);
