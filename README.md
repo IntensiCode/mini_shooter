@@ -48,5 +48,5 @@ https://intensicode.github.io/mini_shooter/
 
 ![Title](images/title.png)
 
-![Title](images/snapshot.png)
+![Demo](images/galaxina.gif)
 
