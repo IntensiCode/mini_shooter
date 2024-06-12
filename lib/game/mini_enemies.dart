@@ -34,7 +34,8 @@ class MiniEnemies extends MiniScriptComponent {
 
   void _onDefeated() {
     logInfo('enemy defeated ${children.length}');
-    if (children.length <= 1) sendMessage(EnemiesDefeated());
+    final defeated = _enemies.any((it) => !it.isDefeated);
+    if (defeated) sendMessage(EnemiesDefeated());
   }
 
   void reactivate() => _active = true;

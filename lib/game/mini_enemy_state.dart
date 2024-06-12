@@ -1,5 +1,6 @@
 enum MiniEnemyState {
   attacking,
+  defeated,
   following,
   incoming,
   launching,

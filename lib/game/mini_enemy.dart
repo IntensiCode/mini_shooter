@@ -34,6 +34,8 @@ class MiniEnemy extends PositionComponent
 
   MiniEnemyState _state = MiniEnemyState.incoming;
 
+  bool get isDefeated => _state == MiniEnemyState.defeated;
+
   bool get isActive => _state != MiniEnemyState.waiting;
 
   bool get isWaiting => _state == MiniEnemyState.waiting;
@@ -190,6 +192,7 @@ class MiniEnemy extends PositionComponent
   void whenDefeated() {
     if (random.nextInt(3) == 0) spawnItem(position);
     state.score += kind.life * 10;
+    _state = MiniEnemyState.defeated;
     onDefeated();
   }
 
