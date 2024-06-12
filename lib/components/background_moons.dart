@@ -26,7 +26,7 @@ extension ScriptFunctionsExtension on MiniScriptFunctions {
 class BackgroundMoons extends AutoDisposeComponent with MiniScriptFunctions {
   static const scale = 1.0;
   static const opacity = 0.333;
-  static const baseSpeed = 8;
+  static const baseSpeed = 12;
   static const outsideOffset = 32;
   static final black = Paint()..color = const Color(0xFF000000);
 
