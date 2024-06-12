@@ -80,6 +80,9 @@ extension TiledMapExtensions on TiledMap {
 }
 
 extension TiledObjectExtensions on TiledObject {
+  double get spawnAt =>
+      properties.firstWhere((it) => it.name == 'SpawnAt').value as double;
+
   String get spawnSpec =>
       properties.firstWhere((it) => it.name == 'SpawnSpec').value.toString();
 }
