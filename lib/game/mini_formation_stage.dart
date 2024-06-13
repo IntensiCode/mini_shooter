@@ -47,7 +47,7 @@ class MiniFormationStage extends MiniScriptComponent with KeyboardHandler, MiniG
     backgroundMoons();
     backgroundAsteroids().maxAsteroids = 0;
 
-    _items = items();
+    _items = items(level);
     _balls = balls(level);
     effects();
 

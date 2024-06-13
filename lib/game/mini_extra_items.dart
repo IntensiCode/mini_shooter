@@ -11,7 +11,7 @@ import '../util/random.dart';
 import 'mini_effects.dart';
 
 extension ScriptFunctionsExtension on MiniScriptFunctions {
-  MiniExtraItems items() => added(MiniExtraItems());
+  MiniExtraItems items(int level) => added(MiniExtraItems(level));
 }
 
 extension ComponentExtensions on Component {
@@ -19,6 +19,10 @@ extension ComponentExtensions on Component {
 }
 
 class MiniExtraItems extends MiniScriptComponent {
+  MiniExtraItems(this.level);
+
+  final int level;
+
   bool get hasActiveItems => children.isNotEmpty;
 
   @override
@@ -41,7 +45,7 @@ class MiniExtraItems extends MiniScriptComponent {
     final it = _pool.removeLastOrNull() ?? MiniItem(_recycle);
     it.sprite.sprite = sprites.getSprite(5, 3 + kind.column);
     it.kind = kind;
-    it.speed = 50;
+    it.speed = (50 + level * 0.25).clamp(50.0, 100.0);
     it.position.setFrom(position);
     add(it);
   }

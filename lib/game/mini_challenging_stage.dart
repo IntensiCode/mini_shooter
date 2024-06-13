@@ -43,7 +43,7 @@ class MiniChallengingStage extends MiniScriptComponent with KeyboardHandler, Min
     backgroundAsteroids().maxAsteroids = 0;
 
     effects();
-    _items = items();
+    _items = items(level);
 
     add(_player = MiniPlayer());
     add(MiniHud());
